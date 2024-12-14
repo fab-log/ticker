@@ -31,7 +31,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendVerificationEmail = (userEmail, verificationCode) => {  
+const sendVerificationEmail = (userEmail, verificationCode) => {
+    // console.log("### => fn sendVerificationEmail to " + userEmail + " triggered");
     const mailOptions = {
         from: 'noreply@fablog.eu',
         to: userEmail,
@@ -103,9 +104,9 @@ const sendResetPasswordEmail = (recipientEmail, subject, body) => {
 }
 
 const verificationTimer = (email) => {
-    console.log("### => fn verificationTimer triggered");
+    // console.log("### => fn verificationTimer triggered");
     setTimeout(() => {
-        fs.readFile("../ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+        fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
             if (err) {
                 res.status = "server error";
                 response.json(res);
@@ -114,13 +115,12 @@ const verificationTimer = (email) => {
             let emailVerificationsArray = JSON.parse(emailVerifications);
             let index = emailVerificationsArray.findIndex(e => e.data.email.at(-1)[2] === email);
             emailVerificationsArray.splice(index, 1);
-            fs.writeFile("../ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
+            fs.writeFile("./ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
                 if (err) {
                     res.status = "server error";
                     response.json(res);
                     throw err;
                 }
-                console.log("emailVerification.json successfully written");
             });
         });        
     }, 180000);  // 1800000 = 30 minutes
@@ -134,7 +134,7 @@ const verificationTimer = (email) => {
 /* app.post('/ticker.upload', (req, res, next) => {
 
     const form = new formidable.IncomingForm();
-    form.uploadDir = path.join(__dirname, '../ticker_db/assets/');
+    form.uploadDir = path.join(__dirname, './ticker_db/assets/');
     form.keepExtensions = true; // Keep file extension
 
     form.parse(req, (err, fields, files) => {
@@ -220,7 +220,7 @@ let monitor = {};
 let numberOfCalls = 0;
 
 const readMonitorData = () => {
-    fs.readFile("../ticker_db/monitor.json", "utf8", (err, data) => {
+    fs.readFile("./ticker_db/monitor.json", "utf8", (err, data) => {
         if (err) {
             console.log("error reading monitor file");
             }
@@ -240,12 +240,11 @@ const updateMonitor = (key) => {
 
 const writeMonitorData = () => {
     if (numberOfCalls > 0) {
-        fs.writeFile("../ticker_db/monitor.json", JSON.stringify(monitor), (err) => {
+        fs.writeFile("./ticker_db/monitor.json", JSON.stringify(monitor), (err) => {
         if (err) {
             console.log("error writing monitor file");
         }
         });
-        console.log("monitor.json successfully written");
         numberOfCalls = 0;
     }
     
@@ -262,7 +261,7 @@ let usersCache;
 let numberOfEdits = 0;
 
 const readUsersDb = () => {
-    fs.readFile("../ticker_db/users.json", "utf8", (err, users) => {
+    fs.readFile("./ticker_db/users.json", "utf8", (err, users) => {
         if (err) {
             console.log("error @ readUsersDb");
             throw err;
@@ -275,14 +274,13 @@ readUsersDb();
 
 const writeUsersDb = () => {
     if (numberOfEdits > 0) {
-        fs.writeFile("../ticker_db/users.json", JSON.stringify(usersCache), (err) => {
+        fs.writeFile("./ticker_db/users.json", JSON.stringify(usersCache), (err) => {
             if (err) {
                 console.log("error @ writeUsersDb");
                 throw err;
             }
         });
         console.log("users.json successfully written");
-        console.log({ numberOfEdits });
         numberOfEdits = 0;
     }
 }
@@ -304,7 +302,7 @@ app.post("/ticker.createAccount", (request, response) => {
         response.json({ status: "Email already exists." });
         return;
     }
-    fs.readFile("../ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+    fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
         if (err) {
             res.status = "server error";
             response.json(res);
@@ -312,7 +310,6 @@ app.post("/ticker.createAccount", (request, response) => {
         }
         let password = data.password;
         hashedPassword = hash(password);
-        // console.log({hashedPassword});
         data.password = hashedPassword;
         let emailVerificationsArray = JSON.parse(emailVerifications);
         let verificationCode = randomNumbers(6);
@@ -323,7 +320,7 @@ app.post("/ticker.createAccount", (request, response) => {
             verificationCode
         };
         emailVerificationsArray.push(verificationObject);
-        fs.writeFile("../ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
+        fs.writeFile("./ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
             if (err) {
                 res.status = "server error";
                 response.json(res);
@@ -333,7 +330,6 @@ app.post("/ticker.createAccount", (request, response) => {
             res.status = "OK";
             delete data.password;
             res.data = data;
-            console.log("ticker/createAccount for " + data.id + " OK");
             response.json(res);
             updateMonitor("createdAccounts");
         });
@@ -345,7 +341,6 @@ app.post("/ticker.inviteByMail", (request, response) => {
     let res = {};
     let parsedUserData = structuredClone(usersCache);
     if (parsedUserData.some(e => e.email.at(-1)[2] === data.recipientEmail)) {
-        console.log("email exists");
         res.status = "email exists";
         response.json(res);
         return;
@@ -359,7 +354,7 @@ app.post("/ticker.inviteByMail", (request, response) => {
 app.post("/ticker.confirmEmail", (request, response) => {
     const data = request.body;
     let res = {};
-    fs.readFile("../ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+    fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
         if (err) {
             res.status = "server error";
             response.json(res);
@@ -387,7 +382,6 @@ app.post("/ticker.confirmEmail", (request, response) => {
         numberOfEdits += 1;
 
         res.status = "OK";
-        console.log("ticker/confirmEmail for " + newUser.id + " OK");
         res.data = newUser;
         response.json(res);
         updateMonitor("confirmEmail");
@@ -419,13 +413,11 @@ app.post('/ticker.login', (request, response) => {
             usersCache = structuredClone(parsedUserData);
             numberOfEdits += 1;
             res.status = "OK";
-            console.log("ticker/login for " + parsedUserData[index].id + " OK");
             delete parsedUserData[index].password;
             res.data = parsedUserData[index];
             response.json(res);
         } else {
             res.status = "OK";
-            console.log("ticker/login for " + parsedUserData[index].id + " OK");
             delete parsedUserData[index].password;  // ### !!! ###
             res.data = parsedUserData[index];
             response.json(res);
@@ -456,7 +448,6 @@ app.post('/ticker.forgotPassword', (request, response) => {
     let parsedUserData = structuredClone(usersCache);
     let index = parsedUserData.findIndex(e => e.email.at(-1)[2] === data.email);
     let res = {};
-    console.log("index in forgotPassword: " + index);
     if (index === -1) {
         res.status = "Error!<br>No valid email<br><br>Fehler!<br>Keine gültige E-Mail-Adresse";
         response.json(res);
@@ -535,7 +526,6 @@ app.post("/ticker.editPersonalData", (request, response) => {
         return;
     }
     if (parsedUserData.some(e => e.email.at(-1)[2] === data.user.email.at(-1)[2]) && data.user.email.at(-1)[2] != parsedUserData[index].email.at(-1)[2]) {
-        console.log("error: email already exists")
         res.status = "No valid data<br><br>Ungültige Eingabe";
         response.json(res);
         return;
@@ -546,7 +536,6 @@ app.post("/ticker.editPersonalData", (request, response) => {
             response.json(res);
             return;
         }
-        console.log("new password: " + data.newPassword);
         data.user.password = hash(data.newPassword);
     } else {
         data.user.password = parsedUserData[index].password;
@@ -649,12 +638,10 @@ app.post("/ticker.deleteAccount", (request, response) => {
 
 app.post('/ticker.getConnectedUsers', (request, response) => {
     const id = request.body.id;
-    // console.log("id from getConnectedUsers: " + id);
     let res = {};
 
     let parsedUserData = structuredClone(usersCache);
     let index = parsedUserData.findIndex(element => element.id === id);
-    // console.log("index: " + index);
     let currentUser = parsedUserData[index];
 
     let connectedUsers = [];
@@ -680,7 +667,7 @@ app.post('/ticker.getConnectedUsers', (request, response) => {
 
 app.post("/ticker.getChat", (request, response) => {
     let data = request.body;
-    let fileName = `../ticker_db/${data.chatId}.json`;
+    let fileName = `./ticker_db/${data.chatId}.json`;
     let res = {};
     fs.readFile(fileName, "utf8", (err, chat) => {
         if (err) {
@@ -697,7 +684,7 @@ app.post("/ticker.getChat", (request, response) => {
 
 app.post("/ticker.addNewChat", (request, response) => {
     let data = request.body;
-    let fileName = `../ticker_db/${data.newChat.id}.json`;
+    let fileName = `./ticker_db/${data.newChat.id}.json`;
     let res = {};
     let parsedUserData = structuredClone(usersCache);
     let indexCurrentUser = parsedUserData.findIndex(e => e.id === data.newChat.participants[0][1]);
@@ -708,14 +695,12 @@ app.post("/ticker.addNewChat", (request, response) => {
     data.newChat.participants.forEach(e => {
             newChatPartners.push(e[1]);
     });
-    console.log({newChatPartners});
     newChatPartners.forEach(e => {     // only matches for 1 to 1 chats, not for groups
         if (e !== currentUser.id) {
             currentUser.chatPartners.push(e);
         }
         let index = parsedUserData.findIndex(el => el.id === e);
         let newChatPartnersMinusSelf = newChatPartners.filter(element => element != parsedUserData[index].id);
-        console.log({newChatPartnersMinusSelf});
         parsedUserData[index].chatPartners.push(...newChatPartnersMinusSelf);
         parsedUserData[index].chatPartners = [...new Set(parsedUserData[index].chatPartners)];      // remove duplicates
         parsedUserData[index].chats.push(data.newChat.id);
@@ -746,14 +731,13 @@ app.post("/ticker.addNewChat", (request, response) => {
         delete currentUser.password;
         res.data = currentUser;
         response.json(res);
-        console.log("New " + data.newChat.id + " successfully created");
         updateMonitor("addNewChat");
     });
 });
 
 app.post("/ticker.updateChat", (request, response) => {
     let data = request.body;
-    let fileName = `../ticker_db/${data.chat.id}.json`;
+    let fileName = `./ticker_db/${data.chat.id}.json`;
     let res = {};
     fs.readFile(fileName, "utf8", (err, chat) => {
         if (err) {
@@ -776,8 +760,6 @@ app.post("/ticker.updateChat", (request, response) => {
         
         const removedParticipants = [...savedIds].filter(id => !clientIds.has(id));
         const addedParticipants = [...clientIds].filter(id => !savedIds.has(id));
-        console.log("added: " + addedParticipants);
-        console.log("removed: " + removedParticipants);
         if (addedParticipants.length > 0 || removedParticipants.length > 0) {
             let parsedUsers = structuredClone(usersCache);
 
@@ -846,7 +828,7 @@ app.post("/ticker.searchUsers", (request, response) => {
 });
 
 app.get("/ticker.monitor", (request, response) => {
-    fs.readFile("../ticker_db/monitor.json", "utf8", (err, data) => {
+    fs.readFile("./ticker_db/monitor.json", "utf8", (err, data) => {
         if (err) {
             return response.status(500).json({ status: "server error reading monitor file" });
         }
