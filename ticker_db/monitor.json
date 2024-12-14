@@ -1,0 +1,19 @@
+{
+    "regularLogins": 0,
+    "createdAccounts": 0,
+    "addNewChat": 0,
+    "sentMessages": 0,
+    "inviteByMail": 0,
+    "confirmEmail": 0,
+    "editPersonalData": 0,
+    "updateUserSilent": 0,
+    "deleteAccount": 0,
+    "updateUser": 0,
+    "searchUsers": 0,
+    "totalLogins": 0,
+    "quickLogins": 0,
+    "getConnectedUsers": 0,
+    "getChat": 0,
+    "getUser": 0,
+    "forgotPassword": 0
+}
