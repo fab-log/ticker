@@ -1,8 +1,6 @@
-# ticker
-
 <img src="https://github.com/fab-log/ticker/blob/main/public/pix/logo_wide.webp" alt="ticker logo" width="400">
 
-ticker is a web based simple text messaging application written in Javascript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
+ticker is a web based, simple text messaging application written in Javascript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
 
 Features are:
 
