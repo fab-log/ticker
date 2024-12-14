@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ticker messenger</title>
+        <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.png" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="browser based messenger" />
+        <meta property="og:url" content="" />
+        <meta property="og:type" content="web application" />
+        <meta property="og:title" content="morse messenger" />
+        <meta property="og:description" content="browser based messenger" />
+        <meta property="og:image" content="" />
+    </head>
+    <body>
+        <div class="main">
+            <div class="overview">
+                <div class="header" id="tester">
+                    <img
+                        src="pix/logo_wide.webp"
+                        alt="ticker logo"
+                        class="logo-header"
+                        id="logo-header"
+                    />
+                    <img
+                        src="pix/burger.webp"
+                        alt="icon settings"
+                        title="toggle menu"
+                        class="icon"
+                        onclick="toggleMenu()"
+                    />
+                    <img
+                        src="pix/update.webp"
+                        alt="icon update"
+                        title="update"
+                        class="icon"
+                        id="imgOverviewHeaderUpdate"
+                        onclick="checkForNewMessages()"
+                    />
+                    <img
+                        src="pix/plus.webp"
+                        alt="add new chat"
+                        title="add new chat"
+                        class="icon"
+                        id="imgOverviewHeaderPlus"
+                        onclick="renderModalNewChat()"
+                    />
+                </div>
+                <div class="overview-items" id="divOverviewItems">
+                    <div class="welcome-item" id="welcome-item-left">
+                        <!-- <img src="pix/missile.webp" alt="starting missile" style="width: 48px; margin-top: 24px;"> -->
+                        <div class="welcome-div">
+                            <h3 id="strWelcomeH3"></h3>
+                            <img src="pix/missile.webp" alt="starting missile">
+                        </div>
+                        <!-- <p id="strWelcomeP1"></p>
+                        <p id="strWelcomeP2"></p>
+                        <p id="strWelcomeP3"></p> -->
+
+                        <div class="chat-item in text-align-left">
+                            <p>
+                                <span class="overview-name">ticker team</span
+                                ><span
+                                    class="timestamp"
+                                    id="t1"
+                                ></span
+                                ><br />
+                                <span id="strWelcomeP1"></span>
+                            </p>
+                        </div>
+
+                        <div class="chat-item out text-align-left">
+                            <p>
+                                <span
+                                    class="overview-name"
+                                    id="strWelcomePMe"
+                                ></span
+                                ><span
+                                    class="timestamp"
+                                    id="t2"
+                                ></span
+                                ><br />
+                                <span id="strWelcomeP2"></span>
+                            </p>
+                        </div>
+
+                        <div class="chat-item in text-align-left">
+                            <p>
+                                <span class="overview-name">ticker team</span
+                                ><span
+                                    class="timestamp"
+                                    id="t3"
+                                ></span
+                                ><br />
+                                <span id="strWelcomeP3"></span>
+                            </p>
+                        </div>
+
+                        <div class="chat-item in text-align-left">
+                            <p>
+                                <span class="overview-name">ticker team</span
+                                ><span
+                                    class="timestamp"
+                                    id="t4"
+                                ></span
+                                ><br />
+                                <span id="strWelcomeP4"></span>
+                            </p>
+                        </div>
+
+                        <div class="chat-item in text-align-left">
+                            <p>
+                                <span class="overview-name">ticker team</span
+                                ><span
+                                    class="timestamp"
+                                    id="t5"
+                                ></span
+                                ><br />
+                                <span id="strWelcomeP5"></span>
+                            </p>
+                        </div>
+
+                        <div class="chat-item out text-align-left">
+                            <p>
+                                <span class="overview-name" id="strWelcomePMe2"></span
+                                ><span class="timestamp" id="t6"></span><br />
+                                ticker is fun [morse]
+                            </p>
+                            <hr class="hr-in-message"/>
+                            <div class="morseLong"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseLongSpace"></div>
+                            <br />
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseLongSpace"></div>
+                            <br />
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShortSpace"></div>
+                            <div class="morseLong"></div>
+                            <div class="morseShort"></div>
+                            <div class="morseShortSpace"></div>
+                        </div>
+                    </div>
+                    <div class="home-item" id="home-item-left">
+                        <img
+                            src="pix/logo_wide.webp"
+                            alt="ticker logo"
+                            class="logo-wide"
+                        /><br />
+                        <button
+                            type="button"
+                            onclick="renderModalCreateAccount()"
+                            id="btnCreateAccount"
+                        ></button>
+                        <div class="button-badge new">
+                            <p id="strWelcomeNew"></p>
+                        </div>
+                        <button
+                            type="button"
+                            onclick="renderModalLogin()"
+                            id="btnLogin"
+                        ></button>
+                        <div class="button-badge member">
+                            <p id="strWelcomeMember"></p>
+                        </div>
+                        <hr />
+                        <h3 id="strHomeH3"></h3>
+                        <p id="strHomeP1"></p>
+                        <img
+                            src="pix/devices.webp"
+                            alt="various devices"
+                            style="width: 360px"
+                        />
+                        <p id="strHomeP2"></p>
+                        <div class="ticker-container">
+                            <p id="homeMorseAdBanner" class="ticker"></p>
+                        </div>
+                        <!-- <div class="camouflage"></div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat">
+                <div class="header">
+                    <img
+                        src="pix/arrow_back.webp"
+                        alt="back to overview"
+                        class="icon"
+                        id="btnBackToOverview"
+                        onclick="showOverview()"
+                    />
+                    <img
+                        src="pix/update.webp"
+                        alt="icon update"
+                        title="update"
+                        class="icon"
+                        id="imgChatHeaderUpdate"
+                        onclick="checkForNewMessages()"
+                    />
+                    <p><span class="overview-name" id="pChatName"></span></p>
+                </div>
+                <div class="chat-items">
+                    <div class="home-item" id="home-item-right">
+                        <h3 id="strHomeH3_2"></h3>
+                        <p id="strHomeP_1"></p>
+                        <img
+                            src="pix/morse-machine.webp"
+                            alt="morse key"
+                            style="width: 250px"
+                        />
+                        <br>
+                        <h4 id="strHomeH4"></h4>
+                        <img
+                            src="pix/morse-labels.webp"
+                            style="width: 360px"
+                            alt="morse labels consist of a rounded stamp containing your initials as morse code"
+                            class="logo-wide"
+                        />
+                        <p id="strHomeP_2"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu hidden">
+                <!-- <h3>Upload Image</h3>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="image" accept=".jpg, .png" required>
+                <button type="submit">Upload</button>
+            </form>
+            <hr> -->
+
+                <h3 id="strMenuH3Language"></h3>
+                <button type="button" onclick="toggleLanguage(0)">
+                    English
+                </button>
+                <button type="button" onclick="toggleLanguage(1)">
+                    Deutsch
+                </button>
+                <hr />
+                <div id="menuPersonal">
+                    <h3 id="strMenuH3AboutMe"></h3>
+                    <p id="strMenuPAboutMe"></p>
+                    <textarea
+                        id="taAboutMe"
+                        rows="5"
+                        maxlength="10000"
+                        placeholder=" ..."
+                    ></textarea
+                    ><br />
+                    <button type="button" id="strMenuBtnAboutMe"></button>
+                    <hr />
+                    <h3 id="strMenuH3Color"></h3>
+                    <input
+                        id="inpColor"
+                        oninput="changeColor()"
+                        type="range"
+                        min="0"
+                        max="350"
+                        step="10"
+                        value="30"
+                    />
+                    <div>
+                        <p>Hue: <span id="colorValue">30</span></p>
+                    </div>
+                    <!-- <div id="colorBullet"></div> -->
+                    <hr />
+                    <h3 id="strMenuH3Mode"></h3>
+                    <button
+                        type="button"
+                        id="strMenuBtnToggleDarkMode"
+                        onclick="toggleMode('dark')"
+                    ></button>
+                    <button
+                        type="button"
+                        id="strMenuBtnToggleLightMode"
+                        onclick="toggleMode('light')"
+                    ></button>
+                    <hr />
+                    <h3 id="strMenuH3Audio"></h3>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="1"
+                        value="1"
+                        class="switch switch-active"
+                        id="inpAudio"
+                        oninput="setAudio()"
+                    />
+                    <hr />
+                    <h3 id="strMenuH3Fullscreen"></h3>
+                    <button
+                        type="button"
+                        id="strMenuBtnTriggerFullscreen"
+                        onclick="openFullscreen()"
+                    ></button>
+                    <button
+                        type="button"
+                        id="strMenuBtnExitFullscreen"
+                        onclick="closeFullscreen()"
+                    ></button>
+                    <hr />
+                    <h3 id="strMenuH3AutoUpdateInterval"></h3>
+                    <input
+                        type="range"
+                        min="1"
+                        max="15"
+                        step="1"
+                        value="2"
+                        id="inpUpdateInterval"
+                        oninput="setUpdateInterval()"
+                    />
+                    <p>
+                        <span id="strMenuPAutoUpdateInterval"></span>:
+                        <b><span id="pUpdateInterval">2</span></b>
+                    </p>
+                    <hr />
+                    <h3 id="strMenuH3Profile"></h3>
+                    <button
+                        type="button"
+                        id="strMenuBtnEditProfile"
+                        onclick="renderModalEditPersonalData()"
+                    ></button>
+                    <button
+                        type="button"
+                        id="strMenuBtnDeleteProfile"
+                        onclick="renderModalConfirmDeleteAccount()"
+                    ></button>
+                    <hr />
+                    <h3 id="strMenuH3Logout"></h3>
+                    <button
+                        type="button"
+                        id="strMenuBtnLogout"
+                        onclick="logout()"
+                    ></button>
+                    <p>
+                        (<span id="strMenuPLoggedInUser"></span>
+                        <span id="pLoggedInUser"></span>)
+                    </p>
+                    <hr />
+                </div>
+
+                <h3 id="strMenuH3AboutThisApp"></h3>
+                <div id="strMenuAboutThisApp"></div>
+                <hr />
+                <p>
+                    <span id="strMenuPVersion"></span>
+                    <span id="pVersion"></span>
+                </p>
+                <div class="camouflage"></div>
+            </div>
+
+            <div class="modal hidden"></div>
+        </div>
+        <!--main-->
+
+        <div class="alert" id="alert"></div>
+
+        <div class="modal-context-menu-message"></div>
+
+        <audio id="audioIn">
+            <source src="audio/notice-bounce.mp3" type="audio/mpeg">
+        </audio>
+
+        <audio id="audioOut">
+            <source src="audio/bling_glitch.mp3" type="audio/mpeg">
+        </audio>
+    
+
+        <!-- ############## -->
+        <!-- ### LOADER ### -->
+        <!-- ############## -->
+
+        <div class="bar">
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+            <div class="pixel"></div>
+        </div>
+
+        <!-- ############### -->
+        <!-- ### SCRIPTS ### -->
+        <!-- ############### -->
+
+        <script src="loader.js"></script>
+        <script src="index.js"></script>
+        <script src="translations.js"></script>
+        <script src="chat.js"></script>
+        <script src="users.js"></script>
+        <script src="morseCode.js"></script>
+    </body>
+</html>
