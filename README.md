@@ -1,38 +1,26 @@
-# ticker - documentation
+# ticker
 
-## Important note
+<img src="https://github.com/fab-log/ticker/blob/main/public/pix/logo_wide.webp" alt="ticker logo" width="400">
 
-Before starting the app make sure to create a directory called `ticker_db` on the same level as the application folder. Inside that directory you need to create the following files:
+ticker is a web based simple text messaging application written in Javascript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
 
-1. `users.json`
-containing an empty array
+Features are:
 
-3. `emailVerification.json`
-containing an empty array
+- Responsive design working on all kinds of screens
+- notifications for new messages or new chats
+- Individual customization
+    - coloring
+    - light / dark mode
+    - audio on / off
+    - fullscreen
+    - update interval
+- simple formatting including bold and italic text, line breaks
+- auto detection for urls, email addresses, and phone numbers
+- translate text to morse code by adding *[morse]* to the end of a message
 
-3. `monitor.json`
-holding a object:
-```
-{
-    "regularLogins": 0,
-    "createdAccounts": 0,
-    "addNewChat": 0,
-    "sentMessages": 0,
-    "inviteByMail": 0,
-    "confirmEmail": 0,
-    "editPersonalData": 0,
-    "updateUserSilent": 0,
-    "deleteAccount": 0,
-    "updateUser": 0,
-    "searchUsers": 0,
-    "totalLogins": 0,
-    "quickLogins": 0,
-    "getConnectedUsers": 0,
-    "getChat": 0,
-    "getUser": 0,
-    "forgotPassword": 0
-}
-```
+<img src="https://github.com/fab-log/ticker/blob/main/public/pix/devices.webp" alt="ticker app on multiple devices" width="500">
+
+# documentation
 
 ## Data Structure
 
