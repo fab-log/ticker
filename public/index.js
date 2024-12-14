@@ -64,7 +64,38 @@ const sanitize = (string) => {
 		  return char;
 	  }
 	});
-  }
+}
+
+const urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i;
+const phoneRegex = /^(?:\+?\d{1,3})?\d{5,}$/;
+const twoDotsRegex = /\..*\..*/;
+
+const format = (string) => {
+    string = string.replace(/(?:\r\n|\r|\n)/g, " <br>");
+    let wordsArray = string.split(" ");
+    let output = "";
+    wordsArray.forEach(e => {
+        if (emailRegex.test(e) === true) {
+            output += `<a href="mailto:${e}">${e}</a> `;
+            return;
+        }
+        if ((twoDotsRegex.test(e) === false && e.includes(".") && isNaN(e) && !e.endsWith(".")) || (e.substring(0, 4) === "http") || (e.substring(0, 4) === "www.")) {
+            let link = e;
+            if (e.substring(0, 4) != "http") {
+                link = "https://" + e;
+            }
+            output += `<a href="${link}" target="_blank" rel="noopener noreferrer">${e}</a> `;
+            return;
+        }
+        if (phoneRegex.test(e) === true) {
+            output += `<a href="tel:${e}">${e}</a> `;
+            return;
+        }
+        output += `${e} `;
+    });
+    output = output.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>')
+    return output;
+}
 
 let hueTimestamp;
 
@@ -143,10 +174,10 @@ strMenuBtnAboutMe.addEventListener("click", () => {
 const inpAudio = document.querySelector("#inpAudio");
 const setAudio = () => {
 	if (inpAudio.value === "0") {
-		config.audio = 0;
+		config.audio = false;
 		inpAudio.classList.remove("switch-active");
 	} else if (inpAudio.value === "1") {
-		config.audio = 1;
+		config.audio = true;
 		inpAudio.classList.add("switch-active");
 	}
 	currentUser.config.audio = config.audio;

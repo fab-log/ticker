@@ -179,13 +179,12 @@ const verifyEmail = (email) => {
         inpVerifyEmailAllowFindMe.checked ? config.allowFindMe = true : config.allowFindMe = false;
         config.hue = 30;
         config.autoUpdate = 120000;
-        config.audio = 1;
+        config.audio = true;
         confirmAccount(email, input, config);
     });
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const phoneRegex = /^(?:\+?\d{1,3})?\d{5,}$/;
 
 const createAccount = async (event) => {
     console.log("### => fn createAccount triggered");
@@ -326,7 +325,7 @@ const applyConfig = () => {
         localStorage.setItem("tickerConfig", JSON.stringify(localStorageObject));
     }
 
-    if (currentUser.config.audio === 0) {
+    if (currentUser.config.audio === false) {
         inpAudio.value = "0";
 		inpAudio.classList.remove("switch-active");
 	} else {

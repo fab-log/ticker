@@ -435,7 +435,7 @@ const renderChat = async (chatId) => {
 		chatItems.insertAdjacentHTML("beforeend", `
 			<div class="chat-item ${inOut}" id="${currentChat.messages[i].id}">
 				<p><span class="overview-name">${author}</span><span class="timestamp">${dateAndTimeToString(currentChat.messages[i].text.at(-1)[0])}</span><br>
-				${text}</p>${morse}
+				${format(text)}</p>${morse}
 			</div>
 		`);
 		lastMessageId = currentChat.messages[i].id;
@@ -567,7 +567,7 @@ const sendMessage = async () => {
 	currentChat.messages.push(newMessage);
 	// const imgSendMessage = document.querySelector("#imgSendMessage");
 	await updateChat();
-	if (currentUser.config.audio === 1) { audioOut.play(); }
+	if (currentUser.config.audio === true) { audioOut.play(); }
 	renderOverview(); // ### NEEDS TESTING! ###
 	renderChat(currentChat.id);
 	taMessageInput.value = "";
@@ -685,7 +685,7 @@ const checkForNewMessages = async () => {
 	}
 	if (newMessages > 0 || chats.length > lengthOld) {
 		console.log("New messages found!");
-		if (currentUser.config.audio === 1) { audioIn.play(); }
+		if (currentUser.config.audio === true) { audioIn.play(); }
 		showNotification(lang("New messages!", "Neue Nachricht!"));
 		renderOverview();
 		highlightActiveOverviewItem();
