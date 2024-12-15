@@ -70,9 +70,8 @@ Example for one user. The database holds an array of users called `users.json`. 
         "chat_1729339335675_ymykp34msb0P",
         "chat_1730209733947_75sxLNxeAJPW"
     ],
-    "password": [				// not included when passed to client
-        [1729011342912, "user_1729339335675_WkRwJg1LijwL", "321321321"]
-    ]
+    "password": ["U9LJs3dHvFnO","8911f189b25624f000cedf1bad9966411c5e6ca23b9ab277cc7a9d1f9f462f9f"]	
+    // password is not included when data is passed to client
 }
 ```
 
@@ -91,7 +90,7 @@ connectedUsers = [
     "userName": "jeydee",
     "profilePix": [],
     "about": [
-      "Grüne Tomaten"
+      "Green Tomatoes"
     ],
     "hue": "40"
   }
@@ -131,7 +130,7 @@ chats = [
       [1731229752577, "user_1730493002959_bETfDopWHG"],
       [1731229939789, "user_1729339335676_yU8y2flu140S"]
     ],
-    "groupName": "Gruppe Fünf",
+    "groupName": "Group n° 5",
     "messages": [
       {
         "id": "msg_1731228503906_4LWey76r4ocB",
