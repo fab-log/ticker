@@ -1,20 +1,22 @@
 <img src="https://github.com/fab-log/ticker/blob/main/public/pix/logo_wide.webp" alt="ticker logo" width="400">
 
-ticker is a web based, simple text messaging application written in Javascript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
+## Easy messaging
 
-Features are:
+***ticker*** is a simple web based text messaging application written in JavaScript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
 
-- Responsive design working on all kinds of screens
+Further features are:
+
+- responsive design working on all kinds of screens
 - notifications for new messages or new chats
-- Individual customization
-    - coloring
+- individual customisation
+    - colouring
     - light / dark mode
     - audio on / off
     - fullscreen
     - update interval
 - simple formatting including bold and italic text, line breaks
-- auto detection for urls, email addresses, and phone numbers
-- translate text to morse code by adding *[morse]* to the end of a message
+- automatic in text detection for urls, email addresses, and phone numbers
+- translate text to morse code by adding `[morse]` to the end of a message
 
 <img src="https://github.com/fab-log/ticker/blob/main/public/pix/devices.webp" alt="ticker app on multiple devices" width="500">
 
@@ -194,6 +196,10 @@ config: {
 
 
 
+### /ticker.inviteByMail
+
+
+
 ### /ticker.confirmEmail
 
 
@@ -206,7 +212,19 @@ config: {
 
 
 
+### /ticker.forgotPassword
+
+
+
+### /ticker.getUser
+
+
+
 ### /ticker.editPersonalData
+
+
+
+### /ticker.updateUserSilent
 
 
 
@@ -214,7 +232,7 @@ config: {
 
 
 
-### /ticker.updateUser
+### /ticker.getConnectedUsers
 
 
 
@@ -226,4 +244,12 @@ config: {
 
 
 
+### /ticker.updateChat
+
+
+
 ### /ticker.searchUsers
+
+
+
+### /ticker.monitor
