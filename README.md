@@ -39,7 +39,8 @@ Example for one user. The database holds an array of users called `users.json`. 
         "fullscreen": false,
         "allowFindMe": true,
         "hue": "40",
-        "autoUpdate": 900000
+        "autoUpdate": 900000,
+        "audio": true
     },
     "active": [
         [1729011342912, "user_1729339335675_WkRwJg1LijwL", true]
