@@ -185,7 +185,8 @@ config: {
     rememberMe,		// boolean true or false
     fullscreen,		// boolean true or false
     allowFindMe,	// boolean true or false
-    autoUpdate		// integer > 60000 < 900000 | interval time in ms | default: 120000
+    autoUpdate,		// integer > 60000 < 900000 | interval time in ms | default: 120000
+    audio           // boolean true or false
 }
 ```
 
