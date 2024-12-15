@@ -318,7 +318,8 @@ input {
 textarea {
     padding: 12px;
     background-color: var(--background-color-3);
-    border: solid 3px var(--background-color-4);
+    /* border: solid 3px var(--background-color-4); */
+    border: solid 3px var(--accent-color);
 }
 
 textarea:focus,

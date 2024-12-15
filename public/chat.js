@@ -447,7 +447,7 @@ const renderChat = async (chatId) => {
 		})
 	}
 
-	currentChat.messages.length > 0 && document.querySelector(`#${lastMessageId}`).scrollIntoView();
+	currentChat.messages.length > 3 && document.querySelector(`#${lastMessageId}`).scrollIntoView();
 
 	chatItems.insertAdjacentHTML("beforeend", `
 		<div class="message-input">
@@ -459,7 +459,7 @@ const renderChat = async (chatId) => {
 	const taMessageInput = document.querySelector("#taMessageInput");
 	taMessageInput.scrollIntoView();
 	if (window.innerWidth > 1024) taMessageInput.focus();
-
+	
 	// ### CHAT NAME ###
 	if (currentChat.groupName != "") {
 		chatName = currentChat.groupName;
@@ -542,10 +542,10 @@ const showOverview = () => {
 	currentChat = {};
 	divChat.style.display = "none";
 	divOverview.style.display = "block";
-	divOverviewItems.scrollTop = 0;
 	divOverview.classList.add("slide-in-from-left");
 	let overviewItems = document.querySelectorAll(".overview-item");
 	overviewItems.forEach(e => e.classList.remove("active-item"));
+	divOverviewItems.scrollTop = 0;
 }
 
 const sendMessage = async () => {

@@ -584,7 +584,7 @@ const editPersonalData = async (event) => {
     const inpEditPersonalDataConfirmPassword = document.querySelector("#inpEditPersonalDataConfirmPassword");
     const inpEditPersonalDataNotifications = document.querySelector("#inpEditPersonalDataNotifications");
     const inpEditPersonalDataRememberMe = document.querySelector("#inpEditPersonalDataRememberMe");
-    const inpEditPersonalDataFullscreen = document.querySelector("#inpEditPersonalDataFullscreen");
+    // const inpEditPersonalDataFullscreen = document.querySelector("#inpEditPersonalDataFullscreen");
     const inpEditPersonalDataFindMe = document.querySelector("#inpEditPersonalDataFindMe");
 
     if (inpEditPersonalDataFirstName.value === currentUser.firstName.at(-1)[2] 
@@ -594,7 +594,7 @@ const editPersonalData = async (event) => {
     && inpEditPersonalDataPhone.value === currentUser.phone.at(-1)[2] 
     && inpEditPersonalDataNotifications.checked === currentUser.config.notifications 
     && inpEditPersonalDataRememberMe.checked === currentUser.config.rememberMe 
-    && inpEditPersonalDataFullscreen.checked === currentUser.config.fullscreen 
+    // && inpEditPersonalDataFullscreen.checked === currentUser.config.fullscreen 
     && inpEditPersonalDataFindMe.checked === currentUser.config.allowFindMe 
     && inpEditPersonalDataNewPassword.value === "") {
         showAlert(lang("No changes made!", "Keine Änderungen vorgenommen!"));
@@ -669,7 +669,7 @@ const editPersonalData = async (event) => {
     }
     clonedCurrentUser.config.notifications = inpEditPersonalDataNotifications.checked;
     clonedCurrentUser.config.rememberMe = inpEditPersonalDataRememberMe.checked;
-    clonedCurrentUser.config.fullscreen = inpEditPersonalDataFullscreen.checked;
+    // clonedCurrentUser.config.fullscreen = inpEditPersonalDataFullscreen.checked;
     clonedCurrentUser.config.allowFindMe = inpEditPersonalDataFindMe.checked;
 
     if (inpEditPersonalDataNewPassword.value != "") {
@@ -781,7 +781,7 @@ const renderModalEditPersonalData = () => {
     document.querySelector("#inpEditPersonalDataPhone").value = currentUser.phone.at(-1)[2];
     document.querySelector("#inpEditPersonalDataNotifications").checked = currentUser.config.notifications;
     document.querySelector("#inpEditPersonalDataRememberMe").checked = currentUser.config.rememberMe;
-    document.querySelector("#inpEditPersonalDataFullscreen").checked = currentUser.config.fullscreen;
+    // document.querySelector("#inpEditPersonalDataFullscreen").checked = currentUser.config.fullscreen;
     document.querySelector("#inpEditPersonalDataFindMe").checked = currentUser.config.allowFindMe;
 }
 
