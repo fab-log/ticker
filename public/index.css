@@ -315,16 +315,18 @@ input {
     border: solid 3px transparent;
 }
 
+input:focus {
+    border: solid 3px var(--background-50);
+}
+
 textarea {
     padding: 12px;
     background-color: var(--background-color-3);
-    /* border: solid 3px var(--background-color-4); */
-    border: solid 3px var(--accent-color);
+    border: solid 3px var(--background-50);
 }
 
-textarea:focus,
-input:focus {
-    border: solid 3px var(--background-50);
+textarea:focus {
+    border: solid 3px var(--accent-color);
 }
 
 .ta-message-input {
