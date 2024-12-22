@@ -608,34 +608,6 @@ app.post("/ticker.deleteAccount", (request, response) => {
     updateMonitor("deleteAccount");
 });
 
-/* app.post("/ticker.updateUser", (request, response) => {
-    let data = request.body;
-    let res = {};
-    let parsedUsers = structuredClone(usersCache);
-    let updatedUser = data.userObject;
-    let index = parsedUsers.findIndex(e => e.id === updatedUser.id);
-    if (index === -1) {
-        res.status = "user not found";
-        response.json(res);
-        return;
-    }
-    updatedUser.password = parsedUsers[index].password;
-    // console.log("PW: " + updatedUser.password);
-    parsedUsers.splice(index, 1, updatedUser);
-    
-    // ###########
-    // ### !!! ###
-    // ###########
-    usersCache = structuredClone(parsedUsers);
-    numberOfEdits += 1;
-
-    delete updatedUser.password;
-    res.data = updatedUser;
-    res.status = "OK";
-    response.json(res);
-    updateMonitor("updateUser");
-}); */
-
 app.post('/ticker.getConnectedUsers', (request, response) => {
     const id = request.body.id;
     let res = {};
@@ -746,7 +718,7 @@ app.post("/ticker.updateChat", (request, response) => {
             throw err;
         }
         let parsedChat = JSON.parse(chat);
-        parsedChat.groupName = data.chat.groupName;                             // only important if group name has been edited
+        parsedChat.groupName = data.chat.groupName;                             // only applies if group name has been edited
         
         // ##############################################
         // ### Add / remove participants if necessary ###
@@ -795,6 +767,7 @@ app.post("/ticker.updateChat", (request, response) => {
         let timestamp = Date.now();
         parsedChat.participants[index][0] = timestamp;                          // update timestamp for last seen
         parsedChat.messages = data.chat.messages;
+        parsedChat.hue = data.chat.hue;
 
         fs.writeFile(fileName, JSON.stringify(parsedChat), (err) => {
             if (err) {
@@ -805,7 +778,7 @@ app.post("/ticker.updateChat", (request, response) => {
             res.status = "OK";
             res.data = parsedChat;
             response.json(res);
-            updateMonitor("sentMessages");
+            updateMonitor("updateChat");
         });
     });
 });
@@ -858,9 +831,21 @@ app.get("/ticker.monitor", (request, response) => {
                 h2, button {
                     margin-top: 25px;
                 }
-                td, th {                    
-                    padding: 3px 12px;
+                tr {
                     border-bottom: solid 1px hsl(30, 10%, 20%);
+                }
+                td, th {                    
+                    padding: 3px 12px;                    
+                }
+                button {
+                    outline: none;
+                    padding: 6px 12px;
+                    border: none;
+                    margin-right: 24px;
+                }
+                button:hover {
+                    cursor: pointer;
+                    filter: brightness(1.2);
                 }
             </style>
         </head>
@@ -868,15 +853,18 @@ app.get("/ticker.monitor", (request, response) => {
             const refreshMonitor = () => {
                 window.location.reload();
             }
+            const triggerStopServer = async () => {
+                await fetch("/ticker.stopServer");
+            }
         </script>
-        <img src="https://fablog.eu/assets/logo_wide.png" alt="ticker logo">
+        <img src="../pix/logo_wide.webp" alt="ticker logo">
         <h2>monitor</h2>
         <table>
             <tr>
                 <th><b>Item</b></th><th><b>Value</b></th>
             </tr>
             <tr>
-                <td>created accounts</td><td>${monitor.createdAccounts}</td>
+                <td>createAccount</td><td>${monitor.createdAccounts}</td>
             </tr>
             <tr>
                 <td>deleteAccount</td><td>${monitor.deleteAccount}</td>
@@ -888,10 +876,10 @@ app.get("/ticker.monitor", (request, response) => {
                 <td>total logins</td><td>${monitor.totalLogins}</td>
             </tr>
             <tr>
-                <td>regular logins</td><td>${monitor.regularLogins}</td>
+                <td>login</td><td>${monitor.regularLogins}</td>
             </tr>
             <tr>
-                <td>quick logins</td><td>${monitor.quickLogins}</td>
+                <td>quickLogins</td><td>${monitor.quickLogins}</td>
             </tr>
             <tr>
                 <td>getUser</td><td>${monitor.getUser}</td>
@@ -909,22 +897,23 @@ app.get("/ticker.monitor", (request, response) => {
                 <td>updateUserSilent</td><td>${monitor.updateUserSilent}</td>
             </tr>
             <tr>
-                <td>updateUser</td><td>${monitor.updateUser}</td>
-            </tr>
-            <tr>
                 <td>getConnectedUsers</td><td>${monitor.getConnectedUsers}</td>
             </tr>
             <tr>
                 <td>getChat</td><td>${monitor.getChat}</td>
             </tr>
             <tr>
-                <td>new chats</td><td>${monitor.addNewChat}</td>
+                <td>addNewChat</td><td>${monitor.addNewChat}</td>
             </tr>
             <tr>
-                <td>sent messages</td><td>${monitor.sentMessages}</td>
+                <td>updateChat</td><td>${monitor.updateChat}</td>
+            </tr>
+            <tr>
+                <td>sendMessage</td><td>${monitor.sentMessages}</td>
             </tr>
         </table>
         <button type="button" onclick="refreshMonitor()">refresh</button>
+        <button type="button" onclick="triggerStopServer()" style="background-color: hsl(0, 50%, 67%)">shut down server</button>
         `;
 
         // response.json({ status: "OK", data: html });
@@ -937,4 +926,23 @@ app.get("/ticker.monitor", (request, response) => {
 // ### START SERVER ###
 // ####################
 
-app.listen(port, () => console.log(`listening at ${port}`));
+const server = app.listen(port, () => console.log(`listening at ${port}`));
+
+
+// ###################
+// ### STOP SERVER ###
+// ###################
+
+const stopServer = () => {
+    writeUsersDb();
+    writeMonitorData();
+    console.log("Shutting down server ...");
+    server.close(() => {
+        console.log('Server shut down!');
+    });
+}
+
+app.get("/ticker.stopServer", (request, response) => {
+    stopServer();
+    response.send('Server shut down!');
+});
