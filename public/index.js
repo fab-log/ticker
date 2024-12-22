@@ -143,17 +143,35 @@ const toggleMenu = () => {
 	}
 }
 
+const toggleManual = () => {
+	if (modal.classList.contains("hidden")) {
+		modal.classList.remove("hidden");
+		modal.classList.add("visible");
+		modal.innerHTML = lang(manualEn, manualDe);
+	} else {
+		modal.classList.remove("visible");
+		modal.classList.add("hidden");
+		modal.innerHTML = "";
+	}
+}
+
+let coloredTextBrightness = 40;
+
 const toggleMode = (mode, triggerSource) => {
 	if (mode === "dark") {
 		config.mode = "dark";
 		document.body.classList.remove("light-mode");
-		document.body.classList.add("dark-mode");	
+		document.body.classList.add("dark-mode");
+		coloredTextBrightness = 50;
 	}
 	if (mode === "light") {
 		config.mode = "light";
 		document.body.classList.remove("dark-mode");
 		document.body.classList.add("light-mode");
+		coloredTextBrightness = 40;
 	}
+	renderOverview();
+	if (currentChat.id) renderChat(currentChat.id);
 	currentUser.config.mode = config.mode;
 	if (!triggerSource && currentUser.id) {
 		updateUserSilent();

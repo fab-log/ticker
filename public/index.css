@@ -151,13 +151,13 @@
 :root {
     --hue: 30;
     --offset: 10;
-    --background-color-0: hsl(calc(var(--hue) + var(--offset)), 10%, 25%);
-    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 10%, 78%);
-    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 11%, 81%);
-    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 12%, 84%);
-    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 13%, 86%);
-    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 14%, 88%);
-    --background-50: hsl(var(--hue), 25%, 50%);
+    --background-color-0: hsl(calc(var(--hue) + var(--offset)), 12%, 25%);
+    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 78%);
+    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 81%);
+    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 84%);
+    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 86%);
+    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 88%);
+    --background-50: hsl(var(--hue), 25%, 40%);
     --background-50-offset: hsl(calc(var(--hue) + var(--offset)), 25%, 50%);
     --color: hsl(var(--hue), 25%, 20%);
     --color-dimmed: hsl(var(--hue), 25%, 12%);
@@ -181,7 +181,7 @@
     --background-color-3: hsl(calc(var(--hue) + var(--offset)), 12%, 16%);
     --background-color-4: hsl(calc(var(--hue) - var(--offset)), 13%, 20%);
     --background-color-5: hsl(calc(var(--hue) - var(--offset)), 14%, 25%);
-    --background-50: hsl(var(--hue), 25%, 50%);
+    --background-50: hsl(var(--hue), 25%, 60%);
     --background-50-offset: hsl(calc(var(--hue) + var(--offset)), 25%, 50%);
     --color: hsl(var(--hue), 25%, 88%);
     --color-dimmed: hsl(var(--hue), 25%, 80%);
@@ -196,13 +196,13 @@
 }
 
 .light-mode {
-    --background-color-0: hsl(calc(var(--hue) + var(--offset)), 10%, 25%);
-    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 10%, 78%);
-    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 11%, 81%);
-    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 12%, 84%);
-    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 13%, 86%);
-    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 14%, 88%);
-    --background-50: hsl(var(--hue), 25%, 50%);
+    --background-color-0: hsl(calc(var(--hue) + var(--offset)), 12%, 25%);
+    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 78%);
+    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 81%);
+    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 84%);
+    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 86%);
+    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 88%);
+    --background-50: hsl(var(--hue), 25%, 40%);
     --background-50-offset: hsl(calc(var(--hue) + var(--offset)), 25%, 50%);
     --color: hsl(var(--hue), 25%, 20%);
     --color-dimmed: hsl(var(--hue), 25%, 12%);
@@ -377,7 +377,8 @@ button:hover {
 
 .button-badge {
     position: relative;
-    width: fit-content;
+    min-width: 118px;
+    width: max-content;
     background-color: var(--color-buttons);
     color: var(--background-50);
     border-radius: var(--border-radius);
@@ -395,12 +396,12 @@ button:hover {
 .new {
     top: -72px;
     left: 50%;
-    transform: translate(-105px, 0);
+    transform: translate(-120px, 0);
 }
 
 .member {
     top: -8px;
-    left: 50%;
+    left: 45%;
     /* transform: translate(10px, 0); */
 }
 
@@ -444,8 +445,8 @@ hr {
 }
 
 .hr-in-message {
-    margin: 12px 0;
-    border-bottom: 1px solid var(--background-color-0);
+    margin: 12px 0 6px 0;
+    border-bottom: 2px solid var(--background-color-5);
 }
 
 .hr-highlight {
@@ -515,7 +516,7 @@ hr {
 
 .overview-item {
     display: grid;
-    grid-template-columns: 70px minmax(250px, 86%);
+    grid-template-columns: 75px minmax(250px, 86%);
     /* 14% 86%; */
     z-index: 3;
     min-width: 0;
@@ -726,6 +727,11 @@ hr {
 
 .header p {
     margin-top: 0.8rem;
+}
+
+.group-color {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 .hide {

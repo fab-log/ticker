@@ -167,7 +167,7 @@ const verifyEmail = (email) => {
         }
         if (inpVerifyEmailAllowNotifications.checked) {
             startLoader();
-            showAlert(lang("Please also grant notifications in your browser", "Bitte stimme den Benachrichtigungen auch in deinem Browser zu"));
+            showAlert(lang("Please also grant notifications in your browser", "Bitte stimme den Benachrichtigungen auch in deinem Browser zu"), 5000);
             config.notifications = true;
             await Notification.requestPermission();
             stopLoader();
@@ -528,6 +528,9 @@ const quickLogin = async (id) => {
     if (window.innerWidth > 1024 && chats.length > 0) {
         renderChat(chats.at(-1).id);
     }
+    const fullscreenButton = document.querySelector("#strMenuBtnTriggerFullscreen");
+    fullscreenButton.click();
+    // openFullscreen();
 }
 
 const getUser = async () => {

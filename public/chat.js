@@ -29,7 +29,6 @@ let chats = [];
 const getChats = async () => {
 	console.log("### => fn getChats triggered");
 	console.time("getChats");
-	// startLoader();
 	imgOverviewHeaderUpdate.classList.add("rotate");
 	imgChatHeaderUpdate.classList.add("rotate");
 	setTimeout(() => {
@@ -41,18 +40,17 @@ const getChats = async () => {
 		chats.push(await getChat(currentUser.chats[i]));
 	}
 	console.log({ chats });
-	// stopLoader();
-	// renderOverview();
 	console.timeEnd("getChats");
 }
 
 const updateChat = async () => {
 	console.log("### => fn updateChat " + currentChat.id + " triggered");
-	startLoader();
+	// startLoader();				// muted because loader disturbs in renderChat() when counter badge is removed
 	let data = {
 		userId: currentUser.id,
 		chat: currentChat
 	};
+	console.log("currentChat.hue: " + currentChat.hue);
 
 	const options = {
 		method: "POST",
@@ -64,7 +62,7 @@ const updateChat = async () => {
 	const response = await fetch("/ticker.updateChat", options);
 	let serverResponse = await response.json();
 	let status = serverResponse.status;
-	stopLoader();
+	// stopLoader();
 	if (status != "OK") {
 		showAlert(status);
 		return;
@@ -102,7 +100,6 @@ const renderOverview = () => {
 		return;
 	}
 	divOverviewItems.innerHTML = "";
-	// chats.sort((a, b) => a.messages.at(-1).text.at(-1)[0] - b.messages.at(-1).text.at(-1)[0]);
 	chats.sort((a, b) => {
 		const aHasMessages = Array.isArray(a.messages) && a.messages.length > 0;
 		const bHasMessages = Array.isArray(b.messages) && b.messages.length > 0;
@@ -118,6 +115,7 @@ const renderOverview = () => {
 		let morseLetter1 = "";
 		let morseLetter2 = "";
 		let hue, index;
+		let borderType = "solid";
 		if (e.participants.length === 2) {
 			index = connectedUsers.findIndex(el => el.id === e.participants[1][1]);
 			if (index === -1) {
@@ -135,10 +133,11 @@ const renderOverview = () => {
 		// ### NAME ###
 		let name = "";
 		if (e.groupName != "") {
-			name = "⛬ " + e.groupName;
+			name = e.groupName;
+			hue = e.hue;
 			morseLetter1 = translateToMorse("e");
 			morseLetter2 = translateToMorse("i");
-			hue = 0;
+			borderType = "dashed";
 		} else {
 			if (connectedUsers[index].userName === "") {
 				name = `${connectedUsers[index].firstName} ${connectedUsers[index].lastName}`
@@ -180,13 +179,13 @@ const renderOverview = () => {
 			<div class="overview-item" id="overview-item_${e.id}" onclick="getAndRenderChat('${e.id}')">
 				<div>
 					${badgeHtml}
-					<div class="personal-label" style="rotate: ${randomRotation}deg; border: 3px solid hsl(${hue}, 25%, 50%);">
+					<div class="personal-label" style="rotate: ${randomRotation}deg; border: 3px ${borderType} hsl(${hue}, 25%, ${coloredTextBrightness}%);">
 						<div class="morse-container first-row">${morseLetter1}</div>
 						<div class="morse-container">${morseLetter2}</div>
 					</div>
 				</div>
 					<div>
-						<p><span class="overview-name" style="color: hsl(${hue}, 25%, 50%);">${name}</span><span class="timestamp">${lastMessageTimestamp}</span><br>${lastMessageText}</p>
+						<p><span class="overview-name" style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%);">${name}</span><span class="timestamp">${lastMessageTimestamp}</span><br>${lastMessageText}</p>
 					</div>
 			</div>
 		`);
@@ -217,7 +216,6 @@ const editMessage = (id) => {
 	}
 	currentChat.messages[index].text.push([Date.now(), ta.value]);
 	updateChat();
-	// toggleModal();
 	closeModal();
 	renderOverview();
 	renderChat(currentChat.id);
@@ -227,6 +225,7 @@ const renderModalEditMessage = (id) => {
 	let index = currentChat.messages.findIndex(e => e.id === id);
 	let text = currentChat.messages[index].text.at(-1)[1];
 	modal.innerHTML = `
+		<h3>${lang("Edit message", "Nachricht bearbeiten")}</h3>
 		<textarea id="ta" rows="4" style="width: calc(100% - 48px);">${text}</textarea>
 		<hr>
 		<button type="button" onclick="closeModal()">${lang("dismiss", "abbrechen")}</button>
@@ -286,9 +285,19 @@ const contextMessage = (event, id) => {
 	};
 }
 
+const changeGroupColor = () => {
+	const inpGroupColor = document.querySelector("#inpGroupColor");
+	const groupPersonalLabel = document.querySelector("#groupPersonalLabel");
+	const groupColorValue = document.querySelector("#groupColorValue");
+	let hue = inpGroupColor.value;
+	groupPersonalLabel.style.border = `3px dashed hsl(${Number(hue)}, 25%, ${coloredTextBrightness}%)`;
+	groupColorValue.innerHTML = hue;
+}
+
 const editGroup = async () => {
 	const inpGroupName = document.querySelector("#inpGroupName");
 	const inpNewGroupMember = document.querySelectorAll(".inpNewGroupMember");
+	let hue = document.querySelector("#inpGroupColor").value;
 	let participants = [[Date.now(), currentUser.id]];
 	inpNewGroupMember.forEach(e => {
 		if (e.checked) {participants.push([Date.now(), e.id])}
@@ -309,6 +318,7 @@ const editGroup = async () => {
 	}
 	currentChat.participants = participants;
 	currentChat.groupName = inpGroupName.value;
+	currentChat.hue = hue;
 
 	updateChat();
 	closeAllModals();
@@ -339,6 +349,12 @@ const renderModalEditGroup = () => {
 			</div>
 			`;
 	});
+	let morseLetter1 = translateToMorse("e");
+	let morseLetter2 = translateToMorse("i");
+	let hue = 0;
+	if (currentChat.hue) {
+		hue = currentChat.hue;
+	}
 	modal.innerHTML = `
 		<h3>${lang("Edit Group", "Gruppe bearbeiten")}</h3>
 		<input type="text" id="inpGroupName" placeholder="${lang("group name", "Gruppenname")}">
@@ -346,6 +362,19 @@ const renderModalEditGroup = () => {
 		<p>${lang("Select the users you want to add to or remove from the group", "Wähle die NutzerInnen aus, die du hinzufügen oder entfernen möchtest")}</p>
 		${connectedUsersList}<br>
 		<p class="small">${lang("If you remove a chat partner he or she will no longer receive messages of this group. Past messages will still be visible, though.", "Wenn du hier einen Kontakt enfernst, wird diejenige Person keine neuen Nachrichten aus dem Chat mehr erhalten. Bisherige Nachrichten bleiben aber sichtbar.")}</p>
+		<hr>
+		<div class="group-color">
+			<div>
+				<input id="inpGroupColor" oninput="changeGroupColor()" type="range" min="0" max="350" step="10" value="${hue}"/>
+				<p class="small">Hue: <span id="groupColorValue">${hue}</span></p>
+			</div>
+			<div>
+				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dashed hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+					<div class="morse-container first-row">${morseLetter1}</div>
+					<div class="morse-container">${morseLetter2}</div>
+				</div>
+			</div>
+		</div>
 		<hr>
 		<button type="button" onclick="closeModal(); showHeaderIcons()">${lang("dismiss", "abbrechen")}</button>
 		<button type="submit" onclick="editGroup()">${lang("submit changes", "Änderungen speichern")}</button>
@@ -396,18 +425,23 @@ const renderChat = async (chatId) => {
 		let text = currentChat.messages[i].text.at(-1)[1];
 		let length = text.length;
 		if (text.substring(length - 7, length).toLowerCase() === "[morse]") {
-			morse = "<hr>" + translateToMorse(text.substring(0, length - 7));
+			morse = `<hr class="hr-in-message">${translateToMorse(text.substring(0, length - 7))}`;
 			text = text.substring(0, length - 7);
 
 		}
 		if (currentChat.messages[i].author != currentUser.id) {
 			inOut = "in";
 			let index = connectedUsers.findIndex(el => el.id === currentChat.messages[i].author); // && connectedUsers[index].firstName;
-			hue = connectedUsers[index].hue;
-			if (connectedUsers[index].userName === "" || connectedUsers[index].userName === undefined || connectedUsers[index].userName === null) {
-				author = connectedUsers[index].firstName;
+			if (index === -1) {
+				hue = 0;
+				author = `<i>[${lang("unknown", "unbekannt")}]</i>`
 			} else {
-				author = connectedUsers[index].userName;
+				hue = connectedUsers[index].hue;
+				if (connectedUsers[index].userName === "" || connectedUsers[index].userName === undefined || connectedUsers[index].userName === null) {
+					author = connectedUsers[index].firstName;
+				} else {
+					author = connectedUsers[index].userName;
+				}
 			}
 		} else {
 			inOut = "out";
@@ -416,7 +450,7 @@ const renderChat = async (chatId) => {
 
 		chatItems.insertAdjacentHTML("beforeend", `
 			<div class="chat-item ${inOut}" id="${currentChat.messages[i].id}">
-				<p><span class="overview-name" style="color: hsl(${hue}, 25%, 50%)">${author}</span><span class="timestamp">${dateAndTimeToString(currentChat.messages[i].text.at(-1)[0])}</span><br>
+				<p><span class="overview-name" style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%)">${author}</span><span class="timestamp">${dateAndTimeToString(currentChat.messages[i].text.at(-1)[0])}</span><br>
 				${format(text)}</p>${morse}
 			</div>
 		`);
@@ -445,8 +479,8 @@ const renderChat = async (chatId) => {
 	// ### CHAT NAME ###
 	let pChatNameColor;
 	if (currentChat.groupName != "") {
-		chatName = "⛬ " + currentChat.groupName;
-		pChatNameColor = "hsl(0, 25%, 50%)";
+		chatName = currentChat.groupName;
+		pChatNameColor = `hsl(${currentChat.hue}, 25%, ${coloredTextBrightness}%)`;
 	} else {
 		let index = connectedUsers.findIndex(e => e.id === currentChat.participants[1][1]);
 		if (index === -1) {
@@ -457,7 +491,7 @@ const renderChat = async (chatId) => {
 		} else {
 			chatName = connectedUsers[index].userName;
 		}
-		pChatNameColor = `hsl(${connectedUsers[index].hue}, 25%, 50%)`
+		pChatNameColor = `hsl(${connectedUsers[index].hue}, 25%, ${coloredTextBrightness}%)`;
 	}
 	pChatName.style.color = pChatNameColor;
 	pChatName.innerHTML = chatName;
@@ -465,13 +499,14 @@ const renderChat = async (chatId) => {
 		hideHeaderIcons();
 		showModal();
 		let about = "";
-		let name = `⛬ ${currentChat.groupName} <span class="small">${lang(" (group)", " (Gruppe)")}</span>`
-		// let name = currentChat.groupName + lang(" (⛬ group)", " (⛬ Gruppe)");
+		let name = `${currentChat.groupName} <span class="small">${lang(" (group)", " (Gruppe)")}</span>`;
 		let members = "";
 		let morseLetter1;
 		let morseLetter2;
 		let hue;
+		let numberOfMessages ="";
 		let editButton = "";
+		let borderType = "solid";
 		if (currentChat.groupName === "") {
 			index = connectedUsers.findIndex(e => e.id === currentChat.participants[1][1]);
 			if (index === -1) index = connectedUsers.findIndex(e => e.id === currentChat.participants[0][1]);
@@ -482,12 +517,14 @@ const renderChat = async (chatId) => {
 			morseLetter1 = translateToMorse(connectedUsers[index].firstName.substring(0, 1));
 			morseLetter2 = translateToMorse(connectedUsers[index].lastName.substring(0, 1));
 			hue = connectedUsers[index].hue;
+			numberOfMessages = `${lang("Number of messages: ", "Anzahl der Nachrichten: ")}${currentChat.messages.length}`;
 		} else {
 			members = `<h4>${lang("Members", "Mitglieder")}</h4>`;
 			morseLetter1 = translateToMorse("e");
 			morseLetter2 = translateToMorse("i");
-			hue = 0;
+			hue = currentChat.hue;
 			let loop = 1;
+			borderType = "dashed";
 			currentChat.participants.forEach(e => {
 				let index2 = connectedUsers.findIndex(el => el.id === e[1]);
 				if (index2 === -1 && e[1] != currentUser.id) return;
@@ -518,17 +555,16 @@ const renderChat = async (chatId) => {
 		modal.innerHTML = `
 			<img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal(); showHeaderIcons()">
 			<br>
-			<div class="personal-label" style="border: 3px solid hsl(${hue}, 25%, 50%);">
+			<div class="personal-label" style="border: 3px ${borderType} hsl(${hue}, 25%, ${coloredTextBrightness}%);">
 				<div class="morse-container first-row">${morseLetter1}</div>
 				<div class="morse-container">${morseLetter2}</div>
 			</div>
-			<h3 style="color: hsl(${hue}, 25%, 50%);">${name}</h3>
+			<h3 style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%);">${name}</h3>
 			<p>${about}</p>
-			<p>${members}</p>
+			<p>${members}${numberOfMessages}</p>
 			${editButton}
 		`
-	})
-	// imgChatName.style.display = "block";
+	});
 	highlightActiveOverviewItem();
 }
 
@@ -559,45 +595,23 @@ const sendMessage = async () => {
 		]
 	}
 	currentChat.messages.push(newMessage);
-	// const imgSendMessage = document.querySelector("#imgSendMessage");
 	await updateChat();
 	if (currentUser.config.audio === true) { audioOut.play(); }
-	renderOverview(); // ### NEEDS TESTING! ###
+	renderOverview();
 	renderChat(currentChat.id);
 	taMessageInput.value = "";
 	window.innerWidth > 1024 && taMessageInput.focus();
 }
 
-/* const updateUser = async (userObject) => {
-	console.log("### => fn updateUser triggered");
-	const options = {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: JSON.stringify({ userObject }),
-	};
-	const response = await fetch("/ticker.updateUser", options);
-	let serverResponse = await response.json();
-	let status = serverResponse.status;
-	console.log({ status });
-	if (!serverResponse.data || serverResponse.data === undefined || serverResponse.data === null) {
-		stopLoader();
-		showAlert(status);
-		return;
-	}
-	stopLoader();
-	currentUser = serverResponse.data;
-	console.log(JSON.stringify(serverResponse.data, null, 2));
-} */
-
-// let newChat;
-
 const addNewChat = async (userId) => {
 	console.log("### => fn addNewChat triggered");
 	if (connectedUsers.some(e => e.id === userId)) {
-		showAlert(lang("user already is one of your chat partners", "Diese NutzerIn ist bereits in deiner Chat-Liste"));
-		return;
+		chats.forEach(e => {
+			if (e.participants.length === 2 && (e.participants[0][1] === userId || e.participants[1][1] === userId)) {
+				showAlert(lang("you already have a chat with that user", "Du chattest bereits mit dieser NutzerIn"));
+				return;
+			}
+		});
 	}
 	if (currentUser.id === userId) {
 		showAlert(lang("you cannot chat with yourself", "Du kannst nicht mit dir selbst chatten"));
@@ -632,31 +646,28 @@ const addNewChat = async (userId) => {
 	}
 	currentUser = serverResponse.data;
 	console.log(currentUser);
-	// currentUser.chatPartners.push(userId);
-	// currentUser.chats.push(newChat.id);
 	await getConnectedUsers();
-	// updateUser(currentUser);
 	closeAllModals();
 	chats.push(newChat);
 	renderOverview();
 	renderChat(newChat.id);
-	let result = serverResponse.data;
 }
 
 const showNotification = (text) => {
-	const notification = new Notification('ticker', {
-		body: text,
-		icon: 'favicon.png'
-	});
-
-	setTimeout(() => {
-		notification.close();
-	}, 5000);
-
-	notification.addEventListener('click', () => {
-
-		window.open('https://www.javascripttutorial.net/web-apis/javascript-notification/', '_blank');
-	});
+	if (Notification.permission === 'granted') {
+		const notification = new Notification('ticker', {
+			body: text,
+			icon: 'favicon.png'
+		});
+	
+		setTimeout(() => {
+			notification.close();
+		}, 5000);
+	
+		notification.addEventListener('click', () => {
+			window.open('https://app.fablog.eu/ticker/', '_blank');
+		});
+	}
 }
 
 const checkForNewMessages = async () => {
@@ -667,6 +678,7 @@ const checkForNewMessages = async () => {
 	await getUser();
 	await getChats();
 	await getConnectedUsers();
+	// console.log("Check chatsOld and chats for equality: " + JSON.stringify(chatsOld) === JSON.stringify(chats));
 	let newMessages = 0;
 	let chatsWithNewMessages = [];
 	if (chats.length > 0) {
@@ -682,12 +694,12 @@ const checkForNewMessages = async () => {
 	if (newMessages > 0 || chats.length > lengthOld) {
 		console.log("=== newMessages > 0 || chats.length > lengthOld ===");
 		if (currentUser.config.audio === true) { audioIn.play(); }
-		showNotification(lang("New messages!", "Neue Nachricht!"));
 		renderOverview();
 		highlightActiveOverviewItem();
+		showNotification(lang("New messages!", "Neue Nachricht!"));
 	}
 	if (newMessages > 0 && chatsWithNewMessages.some(e => e === currentChat.id)) {
-		console.log("=== newMessages > 0 && chatsWithNewMessages.some(e => e === currentChat.id ===)");
+		console.log("New message in current chat");
 		let text = taMessageInput.value;
 		renderChat(currentChat.id);
 		taMessageInput.value = text;
@@ -833,6 +845,7 @@ const inviteByEmail = async (event) => {
 const createNewGroup = async () => {
 	const inpNewGroupName = document.querySelector("#inpNewGroupName");
 	const inpNewGroupMember = document.querySelectorAll(".inpNewGroupMember");
+	const inpGroupColor = document.querySelector("#inpGroupColor");
 	let participants = [[Date.now(), currentUser.id]];
 	inpNewGroupMember.forEach(e => {
 		if (e.checked) {participants.push([Date.now(), e.id])}
@@ -853,12 +866,14 @@ const createNewGroup = async () => {
 		return;
 	}
 	let groupName = inpNewGroupName.value;
+	let hue = inpGroupColor.value;
 	
 	startLoader();
 	let newChat = {
 		id: `chat_${Date.now()}_${randomCyphers(12)}`,
 		participants,
 		groupName,
+		hue,
 		messages: [
 		]
 	}
@@ -911,6 +926,9 @@ const renderModalNewGroup = (event) => {
 			</div>
 			`;
 	});
+	let morseLetter1 = translateToMorse("e");
+	let morseLetter2 = translateToMorse("i");
+	let hue = Math.floor(Math.random() * 36) * 10;
 	modal.innerHTML = `
 		<h3>${lang("New Group", "Neue Gruppe")}</h3>
 		<p>${lang("Enter a group name", "Gib der Gruppe einen Namen")}</p>
@@ -918,6 +936,20 @@ const renderModalNewGroup = (event) => {
 		<hr>
 		<p>${lang("Select the users you want to add to the new group", "Wähle die NutzerInnen aus, die du der neuen Gruppe hinzufügen möchtest")}</p>
 		${connectedUsersList}<br>
+		<hr>
+		<p>${lang("Color", "Farbe")}</p>
+		<div class="group-color">
+			<div>
+				<input id="inpGroupColor" oninput="changeGroupColor()" type="range" min="0" max="350" step="10" value="${hue}"/>
+				<p class="small">Hue: <span id="groupColorValue">${hue}</span></p>
+			</div>
+			<div>
+				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dashed hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+					<div class="morse-container first-row">${morseLetter1}</div>
+					<div class="morse-container">${morseLetter2}</div>
+				</div>
+			</div>
+		</div>
 		<hr>
 		<button type="button" onclick="closeModal(); showHeaderIcons()">${lang("dismiss", "abbrechen")}</button>
 		<button type="submit" onclick="createNewGroup()">${lang("create group", "Gruppe anlegen")}</button>

@@ -23,6 +23,7 @@
                         alt="ticker logo"
                         class="logo-header"
                         id="logo-header"
+                        onclick="toggleManual()"
                     />
                     <img
                         src="pix/burger.webp"
@@ -344,8 +345,7 @@
                         oninput="setUpdateInterval()"
                     />
                     <p>
-                        <span id="strMenuPAutoUpdateInterval"></span>:
-                        <b><span id="pUpdateInterval">2</span></b>
+                        <span id="strMenuPAutoUpdateInterval_1"></span><b><span id="pUpdateInterval">2</span></b><span id="strMenuPAutoUpdateInterval_2"></span>
                     </p>
                     <hr />
                     <h3 id="strMenuH3Profile"></h3>
@@ -384,8 +384,7 @@
             </div>
 
             <div class="modal hidden"></div>
-        </div>
-        <!--main-->
+        </div>  <!--main-->
 
         <div class="alert" id="alert"></div>
 
