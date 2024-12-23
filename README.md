@@ -8,6 +8,7 @@ Further features are:
 
 - responsive design working on all kinds of screens
 - notifications for new messages or new chats
+- user interface available in two langiages (English, German)
 - individual customisation
     - colouring
     - light / dark mode
