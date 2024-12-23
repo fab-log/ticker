@@ -378,14 +378,15 @@ button:hover {
 .button-badge {
     position: relative;
     min-width: 118px;
-    width: max-content;
-    background-color: var(--color-buttons);
-    color: var(--background-50);
-    border-radius: var(--border-radius);
-    font-size: 0.8rem;
-    text-align: center;
+    width: fit-content;
     padding: 0 6px;
     rotate: -8deg;
+    border-radius: var(--border-radius);
+    background-color: var(--color-buttons);
+    opacity: 0.85;
+    color: var(--background-50);
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .button-badge p {

@@ -43,11 +43,11 @@ const toggleLanguage = (code, triggerSource) => {
     langPicker('strMenuPVersion', 'version', 'Version');
     langPicker('strHomeH3', 'Esay messaging', 'Einfach plaudern');
     langPicker('strHomeP1', 
-        'Have your chats always and everyehere. On your smartphone, your tablet, and your PC.<br><br>No installation required. Simply run <i><b>ticker</b></i> in your favourite browser.', 
-        'Hab deine Chats immer dabei. Auf dem Smartphone, dem Tablet oder am PC.<br><br>Keine Installation notwendig. <i><b>ticker</b></i> läuft einfach in deinem Lieblingsbrowser.');
+        'Have your chats always and everyehere. On your smartphone, your tablet, and your PC.<br><br>No installation required. Simply run <i>ticker</i> in your favourite browser.', 
+        'Hab deine Chats immer dabei. Auf dem Smartphone, dem Tablet oder am PC.<br><br>Keine Installation notwendig. <i>ticker</i> läuft einfach in deinem Lieblingsbrowser.');
     langPicker('strHomeP2', 
         'And if you are into morsing you can even send messages as morse code', 
-        'Und wenn du ein Morse-fan bist, kannst du deine Nachrichten sogar als Morse-Code verschicken'
+        'Und wenn du ein Morse-Fan bist, kannst du deine Nachrichten sogar als Morse-Code verschicken'
     );
     langPicker('strHomeH3_2', 'ticker and morse', 'tickern und morsen');
     langPicker('strHomeP_1', 

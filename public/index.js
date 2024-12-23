@@ -1,4 +1,4 @@
-const version = "0.0.1";
+const version = "1.0.0";
 const pVersion = document.querySelector("#pVersion");
 pVersion.innerHTML = version;
 
