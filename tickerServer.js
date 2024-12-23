@@ -472,7 +472,7 @@ app.post('/ticker.forgotPassword', (request, response) => {
             }
         </style>
         <img src="https://fablog.eu/assets/logo_wide.png" alt="ticker logo" width="150">
-        <h1>Passwort reset!</h1>
+        <h1>Password reset!</h1>
         <p>Your password has been reset. See your new password below.</p>
         <h4>${newPassword}</h4>
         <p>Please make sure to set your own password as soon as possible. You can do so in the settings menu within the app by choosing <i>'user profile'</i> and <i>'edit'</i></p>
@@ -841,6 +841,7 @@ app.get("/ticker.monitor", (request, response) => {
                     outline: none;
                     padding: 6px 12px;
                     border: none;
+                    border-radius: 12px;
                     margin-right: 24px;
                 }
                 button:hover {
@@ -879,7 +880,10 @@ app.get("/ticker.monitor", (request, response) => {
                 <td>login</td><td>${monitor.regularLogins}</td>
             </tr>
             <tr>
-                <td>quickLogins</td><td>${monitor.quickLogins}</td>
+                <td>quickLogin</td><td>${monitor.quickLogins}</td>
+            </tr>
+            <tr>
+                <td>forgotPassword</td><td>${monitor.forgotPassword}</td>
             </tr>
             <tr>
                 <td>getUser</td><td>${monitor.getUser}</td>
@@ -908,11 +912,8 @@ app.get("/ticker.monitor", (request, response) => {
             <tr>
                 <td>updateChat</td><td>${monitor.updateChat}</td>
             </tr>
-            <tr>
-                <td>sendMessage</td><td>${monitor.sentMessages}</td>
-            </tr>
         </table>
-        <button type="button" onclick="refreshMonitor()">refresh</button>
+        <button type="button" onclick="refreshMonitor()">refresh</button><br><br>
         <button type="button" onclick="triggerStopServer()" style="background-color: hsl(0, 50%, 67%)">shut down server</button>
         `;
 
