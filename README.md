@@ -20,7 +20,95 @@ Further features are:
 
 <img src="https://github.com/fab-log/ticker/blob/main/public/pix/devices.webp" alt="ticker app on multiple devices" width="500">
 
-# documentation
+# Manual
+
+## Contacts
+
+#### Search for Contacts
+
+Click on the plus sign at the top. Here, you can check if your friends are already on ticker by entering a name, username, or email address in the search field. If there are results, you can select the corresponding name and start chatting immediately.
+
+#### Invite via Email
+
+You can invite friends who are not yet on ticker by sending them a message with a link to ticker.
+
+#### Groups
+
+Once you have two or more contacts, you can start a group chat. Give the group a name and select the contacts from the list that you want to include in the group. Finally, you can choose a group color.
+
+## Messages
+
+#### Sending messages
+
+Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.
+In case you like the encryption you can add [morse] to the end of a message and it will be translated to morse code.
+
+#### Editing and Deleting
+
+If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.
+Note that you can only modify your own messages afterward.
+
+#### Retrieving Messages
+
+As long as the browser window is open, ticker checks for new messages every two minutes.¹ However, you can also manually refresh messages by clicking/tapping the icon with the two circular arrows at the top. Additionally, you can adjust the automatic interval in the settings.
+
+¹ Depending on the device and settings, other factors such as power-saving mode or do-not-disturb mode may affect whether and how long ticker remains active in the background.
+
+#### Learn more about your chat partners
+
+On top of the chat messages you find the name of your chat partner or the chat group. Klick or tap on that name to get more information about them.
+
+## Settings
+
+#### Language
+
+Here, you can select your preferred language. Currently, English and German are available.
+
+#### Status
+
+Directly below, you can write something about yourself or what’s on your mind. This information is visible to your contacts. It remains until you delete it or replace it with something else.
+
+#### Color Scheme
+
+This option allows you to influence the general appearance of the app. You determine the accent color, and ticker automatically selects other matching colors.
+This color will also be displayed to your contacts.
+
+#### Mode
+
+Light or dark mode is often a matter of preference. Try out what works best for you. Generally, dark mode is suitable for darker environments or prolonged screen use, while light mode is recommended for bright surroundings.
+
+#### Sounds
+
+When sending and receiving messages, ticker plays short notification sounds, which you can enable or disable here.
+
+#### Fullscreen
+
+Choose fullscreen mode to hide browser tools like the address bar or tabs overview.
+
+#### Update Interval
+
+Here, you can set how frequently messages are automatically retrieved. The value is specified in minutes.
+
+#### User Profile
+
+You can change your user data, such as name and email address. If you want to adjust your password or permissions, you can do so here as well. Please note that your contacts will always see you with your username (if provided) or your first and last name. They may also find you using this information. The email address specified here must be used for login.
+
+#### Permissions
+
+- **Allow notifications**: 
+Decide whether your device is allowed to display notifications.
+- **Stay logged in on this browser**: 
+With this option, you don’t need to log in every time you access ticker. This option is very convenient but should only be used on devices protected by PIN codes, facial recognition, etc. Once you explicitly log out, this setting will be reset.
+- **Allow other ticker users to find you**: 
+This is the only way you can be found on ticker. Other users can search for you using your first and last name, username, or email address.
+
+#### Log Out
+
+On devices used by multiple people, it may be advisable to log out after use. This ensures that no one can view your messages. To log back in, you will need your email address and password.
+
+
+
+# Documentation
 
 ## Data Structure
 
