@@ -152,11 +152,11 @@
     --hue: 30;
     --offset: 10;
     --background-color-0: hsl(calc(var(--hue) + var(--offset)), 12%, 25%);
-    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 78%);
-    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 81%);
-    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 84%);
-    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 86%);
-    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 88%);
+    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 84%);
+    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 88%);
+    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 92%);
+    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 95%);
+    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 98%);
     --background-50: hsl(var(--hue), 25%, 40%);
     --background-50-offset: hsl(calc(var(--hue) + var(--offset)), 25%, 50%);
     --color: hsl(var(--hue), 25%, 20%);
@@ -197,11 +197,11 @@
 
 .light-mode {
     --background-color-0: hsl(calc(var(--hue) + var(--offset)), 12%, 25%);
-    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 78%);
-    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 81%);
-    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 84%);
-    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 86%);
-    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 88%);
+    --background-color-1: hsl(calc(var(--hue) + var(--offset)), 12%, 84%);
+    --background-color-2: hsl(calc(var(--hue) + var(--offset)), 13%, 88%);
+    --background-color-3: hsl(calc(var(--hue) + var(--offset)), 14%, 92%);
+    --background-color-4: hsl(calc(var(--hue) - var(--offset)), 15%, 95%);
+    --background-color-5: hsl(calc(var(--hue) - var(--offset)), 16%, 98%);
     --background-50: hsl(var(--hue), 25%, 40%);
     --background-50-offset: hsl(calc(var(--hue) + var(--offset)), 25%, 50%);
     --color: hsl(var(--hue), 25%, 20%);
@@ -521,7 +521,7 @@ hr {
     /* 14% 86%; */
     z-index: 3;
     min-width: 0;
-    background: linear-gradient(195deg, var(--background-color-1), var(--background-color-2));
+    background: linear-gradient(187deg, var(--background-color-1), var(--background-color-2));
     padding: 12px 15px 7px 15px;
     margin: 2px;
     border-radius: var(--border-radius);
@@ -568,7 +568,7 @@ hr {
 }
 
 .active-item {    
-    background: linear-gradient(195deg, var(--background-color-4), var(--background-color-5));
+    background: linear-gradient(187deg, var(--background-color-4), var(--background-color-5));
     margin-left: 24px;
     border-radius: var(--border-radius-less);
 }
@@ -685,7 +685,7 @@ hr {
 .in {
     /* border-right: 24px solid var(--background-color-0); */
     margin-right: 24px;
-    background: linear-gradient(195deg, var(--background-color-4), var(--background-color-5));
+    background: linear-gradient(187deg, var(--background-color-4), var(--background-color-5));
     color: var(--color-bright);
     border-top-right-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
@@ -696,7 +696,7 @@ hr {
 .out {
     /* border-left: 24px solid var(--background-color-0); */
     margin-left: 24px;
-    background: linear-gradient(195deg, var(--background-color-2), var(--background-color-3));
+    background: linear-gradient(187deg, var(--background-color-2), var(--background-color-3));
     border-top-left-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius-more);

@@ -12,7 +12,7 @@
         <meta property="og:type" content="web application" />
         <meta property="og:title" content="ticker messenger" />
         <meta property="og:description" content="browser based messenger" />
-        <meta property="og:image" content="pix/devices.webp" />
+        <meta property="og:image" content="https://app.fablog.eu/ticker/pix/screenshot_artist.webp" />
     </head>
     <body>
         <div class="main">
@@ -375,11 +375,17 @@
 
                 <h3 id="strMenuH3AboutThisApp"></h3>
                 <div id="strMenuAboutThisApp"></div>
+                <a href="#" id="strLinkToManual" onclick="toggleManual()"></a>
                 <hr />
-                <p>
+                <p class="small">
                     <span id="strMenuPVersion"></span>
                     <span id="pVersion"></span>
                 </p>
+                <p class="small">
+                    <span id="strMenuPLicence"></span> 
+                    <a href="https://opensource.org/license/mit" target="_blank" rel="noopener noreferrer">MIT license</a>
+                </p>
+                <p class="small"><span id="strMenuPSourceCode"></span> <a href="https://github.com/fab-log/ticker/tree/main" target="_blank" rel="noopener noreferrer">GitHub</a></p>
                 <div class="camouflage"></div>
             </div>
 

@@ -40,6 +40,10 @@ const getChats = async () => {
 		chats.push(await getChat(currentUser.chats[i]));
 	}
 	console.log({ chats });
+	if (currentChat.id) {
+		let index5 = chats.findIndex(e => e.id === currentChat.id);
+		currentChat = chats[index5];
+	}
 	console.timeEnd("getChats");
 }
 
@@ -50,7 +54,6 @@ const updateChat = async () => {
 		userId: currentUser.id,
 		chat: currentChat
 	};
-	console.log("currentChat.hue: " + currentChat.hue);
 
 	const options = {
 		method: "POST",
@@ -478,6 +481,7 @@ const renderChat = async (chatId) => {
 	
 	// ### CHAT NAME ###
 	let pChatNameColor;
+	let chatPartner;
 	if (currentChat.groupName != "") {
 		chatName = currentChat.groupName;
 		pChatNameColor = `hsl(${currentChat.hue}, 25%, ${coloredTextBrightness}%)`;
@@ -486,12 +490,13 @@ const renderChat = async (chatId) => {
 		if (index === -1) {
 			index = connectedUsers.findIndex(e => e.id === currentChat.participants[0][1]);
 		}
-		if (connectedUsers[index].userName === "" || connectedUsers[index].userName === undefined || connectedUsers[index].userName === null) {
-			chatName = connectedUsers[index].firstName;
+		chatPartner = connectedUsers[index];
+		if (chatPartner.userName === "" || chatPartner.userName === undefined || chatPartner.userName === null) {
+			chatName = chatPartner.firstName;
 		} else {
-			chatName = connectedUsers[index].userName;
+			chatName = chatPartner.userName;
 		}
-		pChatNameColor = `hsl(${connectedUsers[index].hue}, 25%, ${coloredTextBrightness}%)`;
+		pChatNameColor = `hsl(${chatPartner.hue}, 25%, ${coloredTextBrightness}%)`;
 	}
 	pChatName.style.color = pChatNameColor;
 	pChatName.innerHTML = chatName;
@@ -500,6 +505,7 @@ const renderChat = async (chatId) => {
 		showModal();
 		let about = "";
 		let name = `${currentChat.groupName} <span class="small">${lang(" (group)", " (Gruppe)")}</span>`;
+		let lastSeen = "";
 		let members = "";
 		let morseLetter1;
 		let morseLetter2;
@@ -518,6 +524,9 @@ const renderChat = async (chatId) => {
 			morseLetter2 = translateToMorse(connectedUsers[index].lastName.substring(0, 1));
 			hue = connectedUsers[index].hue;
 			numberOfMessages = `${lang("Number of messages: ", "Anzahl der Nachrichten: ")}${currentChat.messages.length}`;
+			let index4 = currentChat.participants.findIndex(e => e[1] != currentUser.id);
+			if (index4 === -1) { lastSeen = ""; }
+			lastSeen = `</p><p>${lang("last seen:", "Zuletzt gesehen:")} ${dateAndTimeToString(currentChat.participants[index4][0])}`;
 		} else {
 			members = `<h4>${lang("Members", "Mitglieder")}</h4>`;
 			morseLetter1 = translateToMorse("e");
@@ -561,7 +570,7 @@ const renderChat = async (chatId) => {
 			</div>
 			<h3 style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%);">${name}</h3>
 			<p>${about}</p>
-			<p>${members}${numberOfMessages}</p>
+			<p>${members}${numberOfMessages}${lastSeen}</p>
 			${editButton}
 		`
 	});
@@ -699,7 +708,6 @@ const checkForNewMessages = async () => {
 		showNotification(lang("New messages!", "Neue Nachricht!"));
 	}
 	if (newMessages > 0 && chatsWithNewMessages.some(e => e === currentChat.id)) {
-		console.log("New message in current chat");
 		let text = taMessageInput.value;
 		renderChat(currentChat.id);
 		taMessageInput.value = text;

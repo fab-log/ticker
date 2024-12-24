@@ -37,10 +37,13 @@ const toggleLanguage = (code, triggerSource) => {
     langPicker('strMenuPAutoUpdateInterval_2', ' minute(s)', ' Minute(n)');
     langPicker('strMenuH3AboutThisApp', 'About this App', 'Über diese App');
     langPicker('strMenuAboutThisApp', 
-        '<p>ticker is a text messaging app which helps you stay in contact with your family, friends, and collegues. It is all plain and simple to use. No installation is needed. Updates automatically run in the background always providing you with the latest version.</p><p>Use it across all plattforms in your favourite browser. Smartphone in your pocket, tablet on the couch, or PC in office, you always have your chts with you.</p><p><b>Privacy</b></p><p>Besides using the secure https protocol for sending and receiving data, sensitive information is encrypted on the server in order to keep it safe. Data is never passed nor sold to any third party. There is no analytics taking place and nobody spies your data or analyses your behaviour.</p>', 
-        '<p>ticker ist eine Text-Nachrichten-App, die dir hilt mit deiner Familie, deinen Freundinnen oder Kollegen in Kontakt zu bleiben. Es funktioniert ganz einfach. Du musst nichts installieren. Updates finden automatisch im Hintergrund statt und versorgen dich immer mit der aktuellsten Version.</p><p>ticker läuft auf allen Betriebssystemen in deinem Lieblingsbrowser. Handy in der Hosentasche, Tablet auf dem Sofa oder PC im Büro, du hast überall deine aktuellen Chats dabei.</p><p><b>Datenschutz</b></p><p>Wir senden alle Daten über das sichere https-Protokoll. Zusätzlich werden sensible Informationen auf dem Server verschlüsselt, um sie abzusichern. Deine Daten werden an niemanden weitergegeben, nicht verkauft, es finden keine Datenanalysen statt und niemand hat Einblick in deine Daten oder wertet dein Verhalten aus.</p><p>Daten, die wir von die speichern</p><ul><li>Vor- und Nachname</li><li>Nutzername (falls angegeben)</li><li>E-Mail-Adresse</li><li>Passwort</li><li>Telefonnummer (falls angegeben)</li><li>Die Berechtigungen, die du eingerichtet hast</li><li>Dein Status (falls angegeben)</li><li>Nachrichten, die du versendet hast (gelöschte Nachrichten werden auch auf dem Server gelöscht)</li><li>Deine Chat-PartnerInnen</li></ul><p>Fals du <i>"Auf diesem Browser angemeldet bleiben"</i> aktiviert hast, speichert <i>ticker</i> deine ID in der localStorage deines Browsers (vergleichbar mit einem Cookie)</p>');
+        '<p><i>ticker</i> is a text messaging app which helps you stay in contact with your family, friends, and collegues. It is all plain and simple to use. No installation is needed. Updates automatically run in the background always providing you with the latest version.</p><p>Use it across all plattforms in your favourite browser. Smartphone in your pocket, tablet on the couch, or PC in office, you always have your chts with you.', 
+        '<p><i>ticker</i> ist eine Text-Nachrichten-App, die dir hilt mit deiner Familie, deinen Freundinnen oder Kollegen in Kontakt zu bleiben. Es funktioniert ganz einfach. Du musst nichts installieren. Updates finden automatisch im Hintergrund statt und versorgen dich immer mit der aktuellsten Version.</p><p><i>ticker</i> läuft auf allen Betriebssystemen in deinem Lieblingsbrowser. Handy in der Hosentasche, Tablet auf dem Sofa oder PC im Büro, du hast überall deine aktuellen Chats dabei.</p>');
+    langPicker('strLinkToManual', 'Show manual, imprint, and privacy terms', 'Anleitung, Impressum und Datenschutzhinweise anzeigen');
     langPicker('strMenuPLoggedInUser', 'You are currently logged in as', 'Du bist angemeldet als');
     langPicker('strMenuPVersion', 'version', 'Version');
+    langPicker('strMenuPLicence', '© copyright: 2024 Fabian Ruin<br>software may be copied, modified, and distributed under the following license:', '© Copyright: 2024 Fabian Ruin<br>Diese Software darf gemäß der folgenden Lizenz kopiert, verändert und weitergegeben werden:');
+    langPicker('strMenuPSourceCode', 'Source code available on', 'Quellcode abrufbar auf');
     langPicker('strHomeH3', 'Esay messaging', 'Einfach plaudern');
     langPicker('strHomeP1', 
         'Have your chats always and everyehere. On your smartphone, your tablet, and your PC.<br><br>No installation required. Simply run <i>ticker</i> in your favourite browser.', 
@@ -163,6 +166,43 @@ This is the only way you can be found on <i>ticker</i>. Other users can search f
 <p><b>Log Out</b><br>
 On devices used by multiple people, it may be advisable to log out after use. This ensures that no one can view your messages. To log back in, you will need your email address and password.</p>
 
+<hr>
+
+<h2>Imprint</h2>
+<p>Responsible person for this site:<br>Fabian Ruin</p>
+<p>Contact:<br>info[æ]fablog.eu</p>
+
+<hr>
+
+<h2>Privacy</h2>
+<p>Very simple</p>
+<ul>
+	<li>No advertising.</li>
+	<li>No trackers.</li>
+	<li>No preconnect. <span class="small">(download of third party content)</span></li>
+</ul>
+<p>Besides using the secure https protocol for sending and receiving data, sensitive information is encrypted on the
+	server in order to keep it safe. Data is never passed nor sold to any third party. There is no analytics taking
+	place and nobody spies your data or analyses your behaviour.</p>
+<p><b>Data we store about you</b></p>
+<ul>
+	<li>First and last name</li>
+	<li>user name if provided</li>
+	<li>Email address</li>
+	<li>Password</li>
+	<li>Phone number if provided</li>
+	<li>Permissions you granted</li>
+	<li>Your status <i>"(Personal ticker)"</i>, if provided</li>
+	<li>Message you sent (deleted messages are equally deleted on the server)</li>
+	<li>Your chat partners</li>
+</ul>
+<p>In case you checked <i>"Keep me logged in this browser"</i> <i>ticker</i> will store your ID in the browser's
+	localStorage (similar to a cookie). As soon as you explicitely log out, this data will be deleted.</p>
+<p>You can edit all personal information in the settings menu. If desired you can delete your account. In that case all
+	information about you will be deleted from the server and cannot be restored. Your chat partners won't see chats
+	with you anymore. Messages you wrote to group chats will be conserved but instead of your name <i>[unknown]</i> will
+	be displayed.</p>
+
 <div class="camouflage"></div>
 `
 
@@ -241,6 +281,46 @@ Nur so kannst du auf <i>ticker</i> gefunden werden. Andere Nutzer können zur Su
 
 <p><b>Abmelden</b><br>
 Insbesondere auf Geräten, die von mehreren Menschen genutzt werden, kann es sinnvoll sein, sich nach der Nutzung abzumelden. Dadurch stellt du sicher, dass niemand deine Nachrichten einsehen kann. Um dich wieder anzumelden, benötigst du deine E-Mail-Adresse und dein Passwort.</p>
+
+<hr>
+
+<h2>Impressum</h2>
+<p>Verantwortlich für diese Seite:<br>Fabian Ruin</p>
+<p>Kontakt:<br>info[æ]fablog.eu</p>
+
+<hr>
+
+<h2>Datenschutz</h2>
+<p>Ganz einfach</p>
+<ul>
+	<li>Keine Werbung.</li>
+	<li>Keine Tracker.</li>
+	<li>Kein preconnect. <span class="small">(Herunterladen von Drittanbieterinhalten)</span></li>
+</ul>
+<p>Wir senden alle Daten über das sichere https-Protokoll. Zusätzlich werden sensible Informationen auf dem Server
+	verschlüsselt, um sie abzusichern. Deine Daten werden an niemanden weitergegeben, nicht verkauft, es finden keine
+	Datenanalysen statt und niemand hat Einblick in deine Daten oder wertet dein Verhalten aus.</p>
+<p><b>Daten, die wir von dir speichern</b></p>
+<ul>
+	<li>Vor- und Nachname</li>
+	<li>Nutzername, falls angegeben</li>
+	<li>E-Mail-Adresse</li>
+	<li>Passwort</li>
+	<li>Telefonnummer, falls angegeben</li>
+	<li>Die Berechtigungen, die du eingerichtet hast</li>
+	<li>Dein Status <i>"(Persönlicher ticker)"</i>, falls angegeben</li>
+	<li>Nachrichten, die du versendet hast (gelöschte Nachrichten werden auch auf dem Server gelöscht)</li>
+	<li>Deine Chat-PartnerInnen</li>
+</ul>
+<p>Falls du <i>"Auf diesem Browser angemeldet bleiben"</i> aktiviert hast, speichert <i>ticker</i> deine ID in der
+	localStorage des Browsers (vergleichbar mit einem Cookie). Sobald du dich ausdrücklich abmeldest, wird auch diese
+	Information gelöscht</p>
+<p>In den Einstellungen können alle Informationen von dir angepasst werden. Auf Wunsch kannst du dein Konto löschen. Dazu
+	benötigst du dein Passwort. Danach sind alle Informationen über dich auch auf dem Server gelöscht und können nicht
+	wieder hergestellt werden. Deine Chat-PartnerInnen sehen Chats mit dir ab diesem Zeitpunkt nicht mehr. In
+	Gruppenchats, an denen du beteiligt warst, bleiben von dir geschriebene Nachrichten erhalten, jedoch erscheint
+	<i>[unbekannt]</i> als Autor.
+</p>
 
 <div class="camouflage"></div>
 `
