@@ -858,7 +858,7 @@ app.get("/ticker.monitor", (request, response) => {
                 await fetch("/ticker.stopServer");
             }
         </script>
-        <img src="../pix/logo_wide.webp" alt="ticker logo">
+        <img src="https://app.fablog.eu/ticker/pix/logo_wide.webp" alt="ticker logo">
         <h2>monitor</h2>
         <table>
             <tr>
@@ -944,6 +944,6 @@ const stopServer = () => {
 }
 
 app.get("/ticker.stopServer", (request, response) => {
-    stopServer();
     response.send('Server shut down!');
+    stopServer();
 });
