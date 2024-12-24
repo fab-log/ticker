@@ -526,7 +526,7 @@ const renderChat = async (chatId) => {
 			numberOfMessages = `${lang("Number of messages: ", "Anzahl der Nachrichten: ")}${currentChat.messages.length}`;
 			let index4 = currentChat.participants.findIndex(e => e[1] != currentUser.id);
 			if (index4 === -1) { lastSeen = ""; }
-			lastSeen = `</p><p>${lang("last seen:", "Zuletzt gesehen:")} ${dateAndTimeToString(currentChat.participants[index4][0])}`;
+			lastSeen = `</p><p>${lang("Last activity in this chat:", "Zuletzt aktiv in diesem Chat:")} ${dateAndTimeToString(currentChat.participants[index4][0])}`;
 		} else {
 			members = `<h4>${lang("Members", "Mitglieder")}</h4>`;
 			morseLetter1 = translateToMorse("e");
