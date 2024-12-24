@@ -2,13 +2,13 @@
 
 ## Easy messaging
 
-***ticker*** is a simple web based text messaging application written in JavaScript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
+***ticker*** is a web based text messaging application written in JavaScript and node.js. It provides a secure user management and chatting options for one to one chats as well as group chats.
 
 Further features are:
 
 - responsive design working on all kinds of screens
 - notifications for new messages or new chats
-- user interface available in two langiages (English, German)
+- user interface available in two languages (English, German)
 - individual customisation
     - colouring
     - light / dark mode
