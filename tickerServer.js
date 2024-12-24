@@ -499,6 +499,7 @@ app.post('/ticker.forgotPassword', (request, response) => {
 
 app.post("/ticker.getUser", (request, response) => {
     const data = request.body;
+    let res = {};
     let parsedUserData = structuredClone(usersCache);
     let index = parsedUserData.findIndex(e => e.id === data.id);
     if (index === -1) {
@@ -506,7 +507,6 @@ app.post("/ticker.getUser", (request, response) => {
         response.json(res);
         return;
     }
-    let res = {};
     let user = parsedUserData[index];
     delete user.password;
     res.status = "OK";
