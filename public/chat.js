@@ -516,7 +516,15 @@ const renderChat = async (chatId) => {
 		if (currentChat.groupName === "") {
 			index = connectedUsers.findIndex(e => e.id === currentChat.participants[1][1]);
 			if (index === -1) index = connectedUsers.findIndex(e => e.id === currentChat.participants[0][1]);
-			about = connectedUsers[index].about.at(-1) || lang("<i>[no info so far]</i>", "<i>[noch nichts geschrieben]</i>");
+			if (connectedUsers[index].about.length === 0) {
+				about += `<span style="color: grey;"><i>${lang("[did not post anything yet]", "[hat noch nichts geschrieben]")}</i></span>`;
+			} else {
+				about += `
+					<span style="color: hsl(${connectedUsers[index].hue}, 25%, ${coloredTextBrightness}%);">
+						<b><i>${connectedUsers[index].about.at(-1)}</i></b>
+					</span>
+					<img src="pix/quotationMark.webp" class="icon" style="width: 15px; margin-left: 12px; rotate: 180deg;">`
+			}
 			let userName = "";
 			if (connectedUsers[index].userName != "") userName = `(${connectedUsers[index].userName})`;
 			name = `${connectedUsers[index].firstName} ${connectedUsers[index].lastName} ${userName}`;
