@@ -516,6 +516,7 @@ const renderChat = async (chatId) => {
 		if (currentChat.groupName === "") {
 			index = connectedUsers.findIndex(e => e.id === currentChat.participants[1][1]);
 			if (index === -1) index = connectedUsers.findIndex(e => e.id === currentChat.participants[0][1]);
+			about = `<img src="pix/quotationMark.webp" class="icon" style="width: 15px;"></img>`;
 			if (connectedUsers[index].about.length === 0) {
 				about += `<span style="color: grey;"><i>${lang("[did not post anything yet]", "[hat noch nichts geschrieben]")}</i></span>`;
 			} else {
