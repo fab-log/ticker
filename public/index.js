@@ -71,15 +71,18 @@ const phoneRegex = /^(?:\+?\d{1,3})?\d{5,}$/;
 const twoDotsRegex = /\..*\..*/;
 
 const format = (string) => {
-    string = string.replace(/(?:\r\n|\r|\n)/g, " <br>");
-    let wordsArray = string.split(" ");
+    string = string.replace(/(?:\r\n|\r|\n)/g, " <br> ");
+	let wordsArray = string.split (" ");
+    // let wordsArray = string.split(/[\s\r\n]+/);
     let output = "";
+
+	// 	CHECK FOR LINKS
     wordsArray.forEach(e => {
         if (emailRegex.test(e) === true) {
             output += `<a href="mailto:${e}">${e}</a> `;
             return;
         }
-        if ((twoDotsRegex.test(e) === false && e.includes(".") && isNaN(e) && !e.endsWith(".")) || (e.substring(0, 4) === "http") || (e.substring(0, 4) === "www.")) {
+        if ((twoDotsRegex.test(e) === false && e.includes(".") && isNaN(e) && !e.endsWith(".")) || (e.substring(0, 4) === "http") || (e.substring(0, 4) === "www.") || (twoDotsRegex.test(e) === true && e != "...")) {
             let link = e;
             if (e.substring(0, 4) != "http") {
                 link = "https://" + e;
@@ -93,7 +96,37 @@ const format = (string) => {
         }
         output += `${e} `;
     });
-    output = output.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\*(.*?)\*/g, '<i>$1</i>')
+	output = output.replaceAll(" <br> ", " <br>");		// remove unnecssary whitespace
+	
+	// FORMAT UNORDERED LIST
+	const lines = output.split("<br>");		// output.split(/<br>|<\/h3>/);
+	output = "";
+	let inList = false;
+	let ulStart = "<ul>";
+	let ulEnd = "";
+	for (let i = 0; i < lines.length; i++) {
+		if (lines[i].startsWith("- ")) {
+			inList = true;
+			lines[i] = `${ulStart}<li>${lines[i].substring(2)}</li>`;
+			ulStart = "";
+		} else {
+			if (inList === true) {
+				inList = false;
+				ulEnd = "</ul>";
+				ulStart = "<ul>";
+			}
+			lines[i] = ulEnd + lines[i] + "<br>";
+		}
+		output += lines[i];
+	}
+
+	// FORMAT HEADING, BOLD, AND ITALIC
+    output = output
+		.replace(/# (.+?)<br>/g, '<h3>$1</h3>')
+		// .replace(/^# (.*$)/gim, '<h3>$1</h3>')
+		.replace(/\*\*(.*)\*\*/gim, '<b>$1</b>')
+		.replace(/\*(.*)\*/gim, '<i>$1</i>') + '\n';
+
     return output;
 }
 
