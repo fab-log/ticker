@@ -528,8 +528,8 @@ const quickLogin = async (id) => {
     if (window.innerWidth > 1024 && chats.length > 0) {
         renderChat(chats.at(-1).id);
     }
-    const fullscreenButton = document.querySelector("#strMenuBtnTriggerFullscreen");
-    fullscreenButton.click();
+    // const fullscreenButton = document.querySelector("#strMenuBtnTriggerFullscreen");
+    // fullscreenButton.click();
     // openFullscreen();
 }
 
