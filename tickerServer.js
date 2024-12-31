@@ -643,9 +643,10 @@ app.post("/ticker.getChat", (request, response) => {
     let res = {};
     fs.readFile(fileName, "utf8", (err, chat) => {
         if (err) {
-            res.status = "server error";
+            res.status = data.chatId + " not found";
             response.json(res);
-            throw err;
+            console.log(data.chatId + " not found");
+            return;
         }
         res.status = "OK";
         res.data = JSON.parse(chat);
@@ -768,6 +769,7 @@ app.post("/ticker.updateChat", (request, response) => {
         parsedChat.participants[index][0] = timestamp;                          // update timestamp for last seen
         parsedChat.messages = data.chat.messages;
         parsedChat.hue = data.chat.hue;
+        parsedChat.about = data.chat.about;
 
         fs.writeFile(fileName, JSON.stringify(parsedChat), (err) => {
             if (err) {
@@ -781,6 +783,51 @@ app.post("/ticker.updateChat", (request, response) => {
             updateMonitor("updateChat");
         });
     });
+});
+
+app.post("/ticker.removeChat", (request, response) => {
+    let data = request.body;
+    let chat = data.chat;
+    let res = {};
+    res.status = "OK";
+    let parsedUsers = structuredClone(usersCache);
+    for (let i = 0; i < chat.participants.length; i++) {
+        let userIndex = parsedUsers.findIndex(el => el.id === chat.participants[i][1]);
+        if (userIndex === -1) {
+            res.status = "server error";
+            response.json(res);
+            console.log("userIndex in removeChat " + chat.id + " not found");
+            return;
+        }
+        let chatIndex = parsedUsers[userIndex].chats.findIndex(element => element === chat.id);
+        if (chatIndex === -1) {
+            res.status = "server error";
+            response.json(res);
+            console.log("chatIndex in removeChat " + chat.id + " not found");
+            return;
+        }
+        parsedUsers[userIndex].chats.splice([chatIndex], 1);     // HOT!!!
+    };
+
+    let fileName = `./ticker_db/${data.chat.id}.json`;           // HOT!!!
+    fs.unlink(fileName, (err) => {
+        if (err) {
+            res.status = "server error";
+            response.json(res);
+            console.error('Error deleting the file:', err);
+            return;
+        }
+
+        // ###########
+        // ### !!! ###
+        // ###########
+        usersCache = structuredClone(parsedUsers);
+        numberOfEdits += 1;
+    
+        response.json(res);
+        updateMonitor("removeChat");
+    });
+    // response.json(res);     // TO BE REMOVED!!!
 });
 
 app.post("/ticker.searchUsers", (request, response) => {
