@@ -46,46 +46,6 @@ const confirmAccount = async (email, input, config) => {
     // renderOverview();
 }
 
-const termsEn = `
-    <hr>
-    <h3>Terms of Service</h3>
-    <p>This software comes 'as is' without any warranties concerning its functionality. </p>
-    <h3>Privacy</h3>
-    <p><b>Very simple.</b></p>
-    <ul>
-            <li>No advertising.</li>
-            <li>No trackers.</li>
-            <li>No preconnect. <small>(download of third party content)</small></li>
-    </ul>    
-    <p>Data you provide will be stored in a database on the server. The connection to the server is secured using the HTTPS protocol. No data is stored in another location, nor will any data be transferred to other parties.<br>
-    To delete your data, you can use the corresponding built-in feature, which can be found in the settings menu of this application.</p>
-    <h3>Imprint</h3>
-    <p>Responsible person for this site:<br>
-    Fabian Ruin</p>    
-    <p>contact:<br>
-    info[æ]fablog.eu</p>
-`;
-
-const termsDe = `
-    <hr>
-    <h3>Nutzungsbedingungen</h3>
-    <p>Diese Software wird in ihrem derzeitigen Zustand ohne jegliche Garantien bezüglich der Funktionalität bereitgestellt</p>
-    <h3>Datenschutz</h3>
-    <p><b>Ganz einfach.</b></p>
-    <ul>
-            <li>Keine Werbung.</li>
-            <li>Keine Tracker.</li>
-            <li>Kein preconnect. <small>(Download von Drittanbieter-Inhalten)</small></li>
-    </ul>    
-    <p>Daten, die Sie angeben, werden in einer Datenbank auf dem Server gespeichert. Die Verbindung zum Server ist mithilfe des https-Protokolls abgesichert. Es werden keine Daten an anderer Stelle gespeichert oder weitergegeben.<br>
-    Um Ihre Daten zu löschen, nutzen Sie die entsprechende Funktionalität innerhalb der App, die Sie in den Einstellunge finden.</p>
-    <h3>Impressum</h3>
-    <p>Verantwortliche Person:<br>
-    Fabian Ruin</p>    
-    <p>Kontakt:<br>
-    info[æ]fablog.eu</p>
-`
-
 const verifyEmail = (email) => {
     console.log("### => fn verifyEmail triggered");
     /* <p>
@@ -734,11 +694,14 @@ const renderModalEditPersonalData = () => {
     hideHeaderIcons();
     modal.innerHTML = `
         <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal(); showHeaderIcons()">
-        <br><div class="personal-label" style="border: 3px solid hsl(${currentUser.config.hue}, 25%, 50%);">
+        <br><div class="personal-label" style="border: 3px solid hsl(${currentUser.config.hue}, 25%, 50%); margin: -20px 0 25px -3px;">
             <div class="morse-container first-row">${translateToMorse(currentUser.firstName.at(-1)[2].substring(0, 1))}</div>
             <div class="morse-container">${translateToMorse(currentUser.lastName.at(-1)[2].substring(0, 1))}</div>
         </div>
-        <h3>${lang("Edit Personal Data", "Persönliche Daten ändern")}</h3>
+        <div class="menu-heading">
+			<img src="pix/icon_edit.webp" alt="edit" class="menu-icon">
+            <h3>${lang("Edit Personal Data", "Persönliche Daten ändern")}</h3>
+        </div>
         <hr>
         <form id="frmEditPersonalData">
             <input type="text" id="inpEditPersonalDataFirstName" placeholder="${lang("first name", "Vorname")}" maxlength="100"><br>
@@ -829,15 +792,18 @@ const deleteAccount = async (event) => {
 const renderModalConfirmDeleteAccount = () => {
     showModal();
     modal.innerHTML = `
-        <h3 style="color: var(--accent-orange); text-decoration: underline;">${lang('Warning!', 'Warnung!')}</h3>
+        <div class="menu-heading">
+			<img src="pix/icon_warning.webp" alt="warning" class="menu-icon">
+            <h3 style="color: var(--accent-orange); text-decoration: underline;">${lang('Warning!', 'Warnung!')}</h3>
+        </div>
         <p>${lang('This will entirely and permanently delete your account without the possibility to restore it.', 'Das wird dein Nutzerkonto gänzlich und dauerhaft löschen ohne eine Möglichkeit es wiederherzustellen.')}</p>
         <p>${lang('Messages you sent will still be visible for other users but not your name', 'Nachrichten, die du geschrieben hast, werden weiter für andere NutzerInnen sichtbar sein, dein Name jedoch nicht.')}</p>
         <form>
-            <input type="password" id="inpConfirmDeleteAccountPassword" placeholder="${lang('password', 'Passwort')}">
+            <input type="password" id="inpConfirmDeleteAccountPassword" placeholder="${lang('password', 'Passwort')}" maxlength="100">
             <p>${lang('Please enter your password to confirm the deletion of your account.', 'Bitte gib dein Passwort ein, um die Löschung deines Kontos zu bestätigen.')}</p>
             <hr>
             <button type="button" onclick="dismiss()">${lang("dismiss", "abbrechen")}</button>
-            <button type="submit" onclick="deleteAccount(event)">${lang("delete account", "Konto löschen")}</button>
+            <button type="submit" onclick="deleteAccount(event)" style="background-color: var(--accent-orange);">${lang("delete account", "Konto löschen")}</button>
         </form>
         <div class="camouflage"></div>
     `
@@ -894,6 +860,11 @@ const startApp = () => {
         hideHeaderIcons();
         showHome();
     }
+    main.style.display = "block";
+    setTimeout(() => {
+        main.classList.add("opacity-1");
+        main.style.display = "block";        
+    }, 250);
     /* if (Object.keys(currentUser).length === 0) {
         hideHeaderIcons();
         showHome();

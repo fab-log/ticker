@@ -1,4 +1,4 @@
-const version = "0.2.0 (beta)";
+const version = "0.3.0 (beta)";
 const pVersion = document.querySelector("#pVersion");
 pVersion.innerHTML = version;
 
@@ -12,8 +12,17 @@ let currentUser = {
 	config
 };
 
+/* window.addEventListener('resize', () => {
+	setTimeout(() => {
+		let vh = window.innerHeight * 0.01;
+		document.documentElement.style.setProperty('--vh', `${vh}px`);
+		showAlert(`window.innerHeight: ${window.innerHeight}`);		
+	}, 1000);
+}); */
+
+const main = document.querySelector(".main");
 const modal = document.querySelector(".modal");
-// const imgChatName = document.querySelector("#imgChatName");
+const arrowUp = document.querySelector("#arrow-up");
 const pChatName = document.querySelector("#pChatName");
 
 const audioIn = document.querySelector("#audioIn");
@@ -156,6 +165,19 @@ const changeColor = () => {
 	}, 10000);
 }
 
+arrowUp.addEventListener("click", () => {
+	menu.scroll({
+		top: 0,
+		left: 0,
+		behavior: "smooth",
+	  });
+	  modal.scroll({
+		top: 0,
+		left: 0,
+		behavior: "smooth",
+	  });
+})
+
 const menu = document.querySelector(".menu");
 const strMenuH3Language = document.querySelector("#strMenuH3Language");
 const taAboutMe = document.querySelector("#taAboutMe");
@@ -167,11 +189,15 @@ const toggleMenu = () => {
 		if (currentUser.id && currentUser.about.length > 0) {
 			taAboutMe.value = currentUser.about.at(-1);
 		}
+		setTimeout(() => {
+			arrowUp.style.display = "block";
+		}, 500);
 		pChatName.style.display = "none";
 	} else {
 		menu.classList.remove("visible");
 		menu.classList.add("hidden");
 		// imgChatName.style.display = "block";
+		arrowUp.style.display = "none";
 		pChatName.style.display = "block";
 	}
 }
@@ -180,15 +206,24 @@ const toggleManual = () => {
 	if (modal.classList.contains("hidden")) {
 		modal.classList.remove("hidden");
 		modal.classList.add("visible");
-		modal.innerHTML = lang(manualEn, manualDe);
+		modal.innerHTML = lang(manualEn + termsEn, manualDe + termsDe);
+		pChatName.style.display = "none";
+		setTimeout(() => {
+			arrowUp.style.display = "block";
+		}, 500);
 	} else {
 		modal.classList.remove("visible");
 		modal.classList.add("hidden");
 		modal.innerHTML = "";
+		pChatName.style.display = "block";
+		arrowUp.style.display = "none";
 	}
 }
 
 let coloredTextBrightness = 40;
+
+const strMenuBtnToggleDarkMode = document.querySelector("#strMenuBtnToggleDarkMode");
+const strMenuBtnToggleLightMode = document.querySelector("#strMenuBtnToggleLightMode");
 
 const toggleMode = (mode, triggerSource) => {
 	if (mode === "dark") {
@@ -196,12 +231,16 @@ const toggleMode = (mode, triggerSource) => {
 		document.body.classList.remove("light-mode");
 		document.body.classList.add("dark-mode");
 		coloredTextBrightness = 50;
+		strMenuBtnToggleDarkMode.setAttribute('disabled', '');
+		strMenuBtnToggleLightMode.removeAttribute('disabled');
 	}
 	if (mode === "light") {
 		config.mode = "light";
 		document.body.classList.remove("dark-mode");
 		document.body.classList.add("light-mode");
 		coloredTextBrightness = 40;
+		strMenuBtnToggleDarkMode.removeAttribute('disabled');
+		strMenuBtnToggleLightMode.setAttribute('disabled', '');
 	}
 	renderOverview();
 	if (currentChat.id) renderChat(currentChat.id);
@@ -236,6 +275,9 @@ const setAudio = () => {
 	updateUserSilent();
 }
 
+const strMenuBtnExitFullscreen = document.querySelector("#strMenuBtnExitFullscreen");
+const strMenuBtnTriggerFullscreen = document.querySelector("#strMenuBtnTriggerFullscreen");
+
 const fullScreen = document.documentElement;
 const openFullscreen = () => {
 	if (fullScreen.requestFullscreen) {
@@ -245,8 +287,9 @@ const openFullscreen = () => {
 	} else if (fullScreen.msRequestFullscreen) {
 	fullScreen.msRequestFullscreen();
 	}
+	strMenuBtnTriggerFullscreen.setAttribute('disabled', '');
+	strMenuBtnExitFullscreen.removeAttribute('disabled');
 };
-const strMenuBtnTriggerFullscreen = document.querySelector("#strMenuBtnTriggerFullscreen");
 strMenuBtnTriggerFullscreen.addEventListener("click", openFullscreen);
 
 let intervalId;
@@ -277,8 +320,9 @@ const closeFullscreen = () => {
 	} else if (document.msExitFullscreen) {
 		document.msExitFullscreen();
 	}
+	strMenuBtnTriggerFullscreen.removeAttribute('disabled');
+	strMenuBtnExitFullscreen.setAttribute('disabled', '');
 };
-const strMenuBtnExitFullscreen = document.querySelector("#strMenuBtnExitFullscreen");
 strMenuBtnExitFullscreen.addEventListener("click", closeFullscreen);
 
 const divAlert = document.querySelector("#alert");
@@ -373,11 +417,15 @@ const toggleModal = () => {
 		modal.classList.remove("hidden");
 		modal.classList.add("visible");
 		// imgChatName.style.display = "none";
+		setTimeout(() => {
+			arrowUp.style.display = "block";
+		}, 500);
 		pChatName.style.display = "none";
 	} else {
 		modal.classList.remove("visible");
 		modal.classList.add("hidden");
 		// imgChatName.style.display = "block";
+		arrowUp.style.display = "none";
 		pChatName.style.display = "block";
 		modal.innerHTML = "";
 	}	
@@ -387,6 +435,9 @@ const showModal = () => {
 	modal.classList.remove("hidden");
 	modal.classList.add("visible");
 	// imgChatName.style.display = "none";
+	setTimeout(() => {
+		arrowUp.style.display = "block";
+	}, 500);
 	pChatName.style.display = "none";
 }
 
@@ -394,6 +445,7 @@ const closeModal = () => {
 	modal.classList.remove("visible");
 	modal.classList.add("hidden");
 	// imgChatName.style.display = "block";
+	arrowUp.style.display = "none";
 	pChatName.style.display = "block";
 }
 
@@ -403,12 +455,14 @@ const closeAllModals = () => {
 	menu.classList.remove("visible");
 	menu.classList.add("hidden");
 	// imgChatName.style.display = "block";
+	arrowUp.style.display = "none";
 	pChatName.style.display = "block";
 }
 
 const dismiss = () => {
 	modal.classList.remove("visible");
 	modal.classList.add("hidden");
+	arrowUp.style.display = "none";
 	// imgChatName.style.display = "block";
 	// pChatName.style.display = "block";
 	showHeaderIcons();

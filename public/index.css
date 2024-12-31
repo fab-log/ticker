@@ -165,7 +165,7 @@
     --color-buttons: hsl(var(--hue), 25%, 97%);
     --accent-color: hsl(var(--hue), 100%, 25%);
     --accent-blue: hsl(210, 100%, 25%);
-    --accent-orange: hsl(30, 100%, 25%);
+    --accent-orange: hsl(0, 100%, 25%);
     --accent-turqoise: hsl(180, 100%, 25%);
     --accent-fuchsia: hsl(300, 100%, 25%);
     --image-filter: brightness(0.2);
@@ -189,7 +189,7 @@
     --color-buttons: hsl(var(--hue), 25%, 7%);
     --accent-color: hsl(var(--hue), 100%, 85%);
     --accent-blue: hsl(210, 100%, 85%);
-    --accent-orange: hsl(30, 100%, 85%);
+    --accent-orange: hsl(0, 100%, 85%);
     --accent-turqoise: hsl(180, 100%, 85%);
     --accent-fuchsia: hsl(300, 100%, 85%);
     --image-filter: brightness(1.5);
@@ -210,10 +210,21 @@
     --color-buttons: hsl(var(--hue), 25%, 97%);
     --accent-color: hsl(var(--hue), 100%, 25%);
     --accent-blue: hsl(210, 100%, 25%);
-    --accent-orange: hsl(30, 100%, 25%);
+    --accent-orange: hsl(0, 100%, 25%);
     --accent-turqoise: hsl(180, 100%, 25%);
     --accent-fuchsia: hsl(300, 100%, 25%);
     --image-filter: brightness(0.2);
+}
+
+.main {
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+}
+
+.opacity-1 {
+    visibility: visible;
+    opacity: 1;
 }
 
 @font-face {
@@ -244,6 +255,12 @@ section {
 
 .small {
     font-size: 0.9rem;
+}
+
+.mark {
+    background-color: var(--background-color-3);
+    padding: 0 12px;
+    border-radius: 6px;
 }
 
 .text-align-center {
@@ -360,7 +377,7 @@ button {
     /* solid 3px transparent */
     outline: none;
     min-width: 120px;
-    margin: 0 12px 0 0;
+    margin: 12px 12px 0 0;
     padding: 6px 12px 8px 12px;
     border-radius: var(--border-radius);
     font-family: 'Cantarell', sans-serif;
@@ -369,7 +386,12 @@ button {
     color: var(--color-buttons); /* color: var(--color); */
 }
 
-button:hover {
+button:disabled {
+    filter: grayscale(1);
+    opacity: 0.5;
+}
+
+button:hover:not(:disabled) {
     cursor: pointer;
     filter: brightness(120%);
     /* border: solid 3px var(--accent-color); */
@@ -429,6 +451,24 @@ img {
     filter: var(--image-filter); 
 }
 
+.menu-heading {
+    display: grid;
+    grid-template-columns: 40px auto;
+    margin-bottom: 12px;
+}
+
+.menu-icon {
+    width: 20px;
+    margin: 1rem 0 0 0;
+    background-color: var(--background-color-4);
+    padding: 6px;
+    border-radius: 50%;
+}
+
+.float-left {
+    float: left;
+}
+
 a {
     color: var(--color);
 }
@@ -470,11 +510,34 @@ hr {
     /* border-top: solid 2px var(--background-color-0); */
     overflow-y: scroll;
     scrollbar-width: none;
+    scroll-behavior: smooth;
 }
 
 .menu h3,
 .modal h3 {
     margin-bottom: 12px;
+    /* color: var(--background-50); */
+}
+
+.arrow-up {
+    z-index: 12;
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: calc(50% - 450px);
+    width: 36px;
+    height: 36px;
+    opacity: 0.75;
+}
+
+.arrow-up img {
+    rotate: 90deg;
+    width: 36px;
+}
+
+.arrow-up:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
 }
 
 .menu textarea {
@@ -505,7 +568,7 @@ hr {
 }
 
 .close-modal {
-    margin-top: 17px;
+    margin-top: 20px;
     width: 24px;
     float: right;
 }
@@ -663,6 +726,11 @@ hr {
 
 .chat-item p {
     margin: 0;
+}
+
+.chat-item ul {
+    list-style-type: square;
+    padding-left: 24px;
 }
 
 .overview-items,
@@ -1149,6 +1217,10 @@ hr {
     .chat {
         display: none;
         width: 100%;
+    }
+
+    .arrow-up {
+        right: 24px;
     }
 
     .overview {

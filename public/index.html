@@ -263,7 +263,10 @@
             </form>
             <hr> -->
 
-                <h3 id="strMenuH3Language"></h3>
+                <div class="menu-heading">
+                    <img src="pix/icon_translate.webp" alt="language" class="menu-icon">
+                    <h3 id="strMenuH3Language"></h3>
+                </div>
                 <button type="button" onclick="toggleLanguage(0)">
                     English
                 </button>
@@ -272,7 +275,10 @@
                 </button>
                 <hr />
                 <div id="menuPersonal">
-                    <h3 id="strMenuH3AboutMe"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_megaphone.webp" alt="personal ticker" class="menu-icon">
+                        <h3 id="strMenuH3AboutMe"></h3>
+                    </div>
                     <p id="strMenuPAboutMe"></p>
                     <textarea
                         id="taAboutMe"
@@ -283,7 +289,10 @@
                     ><br />
                     <button type="button" id="strMenuBtnAboutMe"></button>
                     <hr />
-                    <h3 id="strMenuH3Color"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_palette.webp" alt="colouring" class="menu-icon">
+                        <h3 id="strMenuH3Color"></h3>
+                    </div>
                     <input
                         id="inpColor"
                         oninput="changeColor()"
@@ -298,7 +307,10 @@
                     </div>
                     <!-- <div id="colorBullet"></div> -->
                     <hr />
-                    <h3 id="strMenuH3Mode"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_mode.webp" alt="mode" class="menu-icon">
+                        <h3 id="strMenuH3Mode"></h3>
+                    </div>
                     <button
                         type="button"
                         id="strMenuBtnToggleDarkMode"
@@ -310,7 +322,10 @@
                         onclick="toggleMode('light')"
                     ></button>
                     <hr />
-                    <h3 id="strMenuH3Audio"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_music.webp" alt="sounds" class="menu-icon">
+                        <h3 id="strMenuH3Audio"></h3>
+                    </div>
                     <input
                         type="range"
                         min="0"
@@ -322,7 +337,10 @@
                         oninput="setAudio()"
                     />
                     <hr />
-                    <h3 id="strMenuH3Fullscreen"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_fullscreen.webp" alt="fullscreen" class="menu-icon">
+                        <h3 id="strMenuH3Fullscreen"></h3>
+                    </div>
                     <button
                         type="button"
                         id="strMenuBtnTriggerFullscreen"
@@ -332,9 +350,13 @@
                         type="button"
                         id="strMenuBtnExitFullscreen"
                         onclick="closeFullscreen()"
+                        disabled
                     ></button>
                     <hr />
-                    <h3 id="strMenuH3AutoUpdateInterval"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_update.webp" alt="update" class="menu-icon">
+                        <h3 id="strMenuH3AutoUpdateInterval"></h3>
+                    </div>
                     <input
                         type="range"
                         min="1"
@@ -348,7 +370,10 @@
                         <span id="strMenuPAutoUpdateInterval_1"></span><b><span id="pUpdateInterval">2</span></b><span id="strMenuPAutoUpdateInterval_2"></span>
                     </p>
                     <hr />
-                    <h3 id="strMenuH3Profile"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_person.webp" alt="profile" class="menu-icon">
+                        <h3 id="strMenuH3Profile"></h3>
+                    </div>
                     <button
                         type="button"
                         id="strMenuBtnEditProfile"
@@ -360,7 +385,10 @@
                         onclick="renderModalConfirmDeleteAccount()"
                     ></button>
                     <hr />
-                    <h3 id="strMenuH3Logout"></h3>
+                    <div class="menu-heading">
+                        <img src="pix/icon_power.webp" alt="log out" class="menu-icon">
+                        <h3 id="strMenuH3Logout"></h3>
+                    </div>
                     <button
                         type="button"
                         id="strMenuBtnLogout"
@@ -373,7 +401,10 @@
                     <hr />
                 </div>
 
-                <h3 id="strMenuH3AboutThisApp"></h3>
+                <div class="menu-heading">
+                    <img src="pix/icon_info.webp" alt="about this app" class="menu-icon">
+                    <h3 id="strMenuH3AboutThisApp"></h3>
+                </div>
                 <div id="strMenuAboutThisApp"></div>
                 <a href="#" id="strLinkToManual" onclick="toggleManual()"></a>
                 <hr />
@@ -390,6 +421,10 @@
             </div>
 
             <div class="modal hidden"></div>
+
+            <div class="arrow-up" id="arrow-up">
+                <img src="pix/arrow_back.webp" alt="move to top">
+            </div>
         </div>  <!--main-->
 
         <div class="alert" id="alert"></div>

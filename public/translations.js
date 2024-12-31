@@ -94,8 +94,16 @@ const toggleLanguage = (code, triggerSource) => {
 const manualEn = `
 <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal()">
 
-<h2>Instructions</h2>
-<hr>
+<div>
+    <h3><b>Content</b></h3>
+        <p>- <a href="#manual">Manual</a><br></p>
+        <p>- <a href="#imprint">Imprint</a><br></p>
+        <p>- <a href="#privacy">Privacy</a><br></p>
+        <p>- <a href="#terms">Terms of Use</a></p>
+    <hr>
+</div>
+
+<h2 id="manual">Manual</h2>
 
 <h3>Contacts</h3>
 
@@ -111,8 +119,17 @@ Once you have two or more contacts, you can start a group chat. Give the group a
 <h3>Messages</h3>
 
 <p><b>Sending messages</b><br>
-Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.<br>
-In case you like the encryption you can add <i>[morse]</i> to the end of a message and it will be translated to morse code.</p>
+Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.</p>
+
+<p><b>Formatting and morse code</b><br>
+<i>ticker</i> provides simple text formatting similar to markdown syntax.</p>
+<ul>
+    <li><span class="mark"># Heading</span> converts to <span style="font-size: 1.25rem;"><b>Heading</b></span></li>
+    <li><span class="mark">*italic*</span> converts to <i>italic</i></li>
+    <li><span class="mark">**bold**</span> converts to <b>bold</b></li>
+    <li><span class="mark">- list item</span> (line starting with '- ') triggers a formatted, unordered list.</li>
+</ul>
+<p>In case you like the encryption you can add <i>[morse]</i> to the end of a message and it will be translated to morse code.</p>
 
 <p><b>Editing and Deleting</b><br>
 If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.<br>
@@ -168,13 +185,13 @@ On devices used by multiple people, it may be advisable to log out after use. Th
 
 <hr>
 
-<h2>Imprint</h2>
+<h2 id="imprint">Imprint</h2>
 <p>Responsible person for this site:<br>Fabian Ruin</p>
 <p>Contact:<br>info[æ]fablog.eu</p>
 
 <hr>
 
-<h2>Privacy</h2>
+<h2 id="privacy">Privacy</h2>
 <p>Very simple</p>
 <ul>
 	<li>No advertising.</li>
@@ -202,20 +219,26 @@ On devices used by multiple people, it may be advisable to log out after use. Th
 	information about you will be deleted from the server and cannot be restored. Your chat partners won't see chats
 	with you anymore. Messages you wrote to group chats will be conserved but instead of your name <i>[unknown]</i> will
 	be displayed.</p>
-
-<div class="camouflage"></div>
 `
 
 const manualDe = `
 <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal()">
 
-<h2>Bedienung</h2>
-<hr>
+<div>
+    <h3><b>Inhalt</b></h3>
+        <p>- <a href="#manual">Bedienung</a></p>
+        <p>- <a href="#imprint">Impressum</a></p>
+        <p>- <a href="#privacy">Datenschutz</a></p>
+        <p>- <a href="#terms">Nutzungsbedingungen</a></p>
+    <hr>
+</div>
+
+<h2 id="manual">Bedienung</h2>
 
 <h3>Kontakte</h3>
 
 <p><b>Kontakte suchen</b><br>
-Klicke auf das Pluszeichen oben. Hier kannst schauen, ob Freunde von dir schon bei <i>ticker</i> sind, indem du einen Namen, Nutzernamen oder eine E-Mail-Adresse in das Suchfeld eingibst. Falls es Ergebnisse gibt, kannst du den entsprechenden Namen auswählen und sofort beginnen zu chatten.</p>
+Klicke auf das Pluszeichen oben. Hier kannst du schauen, ob Freunde von dir schon bei <i>ticker</i> sind, indem du einen Namen, Nutzernamen oder eine E-Mail-Adresse in das Suchfeld eingibst. Falls es Ergebnisse gibt, kannst du den entsprechenden Namen auswählen und sofort beginnen zu chatten.</p>
 
 <p><b>Per E-Mail einladen</b><br>
 Freunde, die noch nicht bei <i>ticker</i> sind, kannst du einladen, indem du ihnen eine Nachricht mit einem Link zu <i>ticker</i> zukommen lässt.</p>
@@ -227,8 +250,18 @@ Sobald du zwei oder mehr Kontakte hast, kannst du einen Gruppenchat starten. Gib
 <h3>Nachrichten</h3>
 
 <p><b>Nachrichten schicken</b><br>
-Wähle einen Chat durch Anklicken oder Antippen aus, um in den Chat zu gelangen. Schreibe eine Nachricht in das Eingabefeld. Mit dem dreieckigen Pfeil rechts daneben schickst du die Nachricht ab.<br>
-Für den Fall, dass du Geheimsprachen magst, kannst du <i>[morse]</i> ans Ende deiner Nachricht anfügen. Dann wird sie in den Morse-Code übersetzt.</p>
+Wähle einen Chat durch Anklicken oder Antippen aus, um in den Chat zu gelangen. Schreibe eine Nachricht in das Eingabefeld. Mit dem dreieckigen Pfeil rechts daneben schickst du die Nachricht ab.</p>
+
+<p><b>Formatierung und Morsecode</b><br>
+<i>ticker</i> bietet eine einfache Textformatierung ähnlich der Markdown-Syntax.</p>
+<ul>
+    <li><span class="mark"># Überschrift</span> wird zu <span style="font-size: 1.4rem;"><b>Überschrift</b></span></li>
+    <li><span class="mark">*kursiv*</span> wird zu <i>kursiv</i></li>
+    <li><span class="mark">**fett**</span> wird zu <b>fett</b></li>
+    <li><span class="mark">- Listeneintrag</span> (Zeile beginnt mit '- ') wird zu einer formatierten Strichliste.</li>
+</ul>
+<p>Für den Fall, dass du Geheimsprachen magst, kannst du <i>[morse]</i> ans Ende deiner Nachricht anfügen. Dann wird sie in den Morse-Code übersetzt.</p>
+
 
 <p><b>Bearbeiten und Löschen</b><br>
 Möchtest du eine Nachricht bearbeiten oder löschen, so geht das über das Kontextmenü. Auf dem Smartphone oder Tablet tippst du dazu lange auf die betreffende Nachricht bis ein Fenster mit den beiden Möglichkeiten erscheint. Am PC funktioniert das mit einem Rechtsklick.<br>
@@ -284,13 +317,13 @@ Insbesondere auf Geräten, die von mehreren Menschen genutzt werden, kann es sin
 
 <hr>
 
-<h2>Impressum</h2>
+<h2 id="imprint">Impressum</h2>
 <p>Verantwortlich für diese Seite:<br>Fabian Ruin</p>
 <p>Kontakt:<br>info[æ]fablog.eu</p>
 
 <hr>
 
-<h2>Datenschutz</h2>
+<h2 id="privacy">Datenschutz</h2>
 <p>Ganz einfach</p>
 <ul>
 	<li>Keine Werbung.</li>
@@ -321,8 +354,68 @@ Insbesondere auf Geräten, die von mehreren Menschen genutzt werden, kann es sin
 	Gruppenchats, an denen du beteiligt warst, bleiben von dir geschriebene Nachrichten erhalten, jedoch erscheint
 	<i>[unbekannt]</i> als Autor.
 </p>
-
-<div class="camouflage"></div>
 `
+
+const termsEn = `
+    <hr>
+    <h2 id="terms">Terms of Use</h2>
+    <p>This software comes 'as is' without any guarantees regarding its functionality.</p>
+    <p>The purpose of the application is private use for sending text messages over the Internet.</p>
+    <p>By using this application, you agree to comply with the following rules:</p>
+    <ul>
+        <li>The unsolicited sending of messages without the consent of the chat partner (spam) is prohibited.</li>
+        <li>Commercial use for advertising purposes or customer acquisition is not permitted.</li>
+        <li>Contributions with offensive, degrading, or racist content, or contributions that exclude groups of people based on their beliefs, sexual orientations, or political convictions are prohibited, regardless of whether they are authored or shared.</li>
+        <li>Contributions with violent, clearly pornographic, or other criminal contents are prohibited.</li>
+    </ul>
+    <p><i>ticker</i> reserves the right to remove messages that violate the above guidelines and/or to ban their authors from using the app.</p>
+    <h3>Privacy</h3>
+    <p><b>Very simple.</b></p>
+    <ul>
+        <li>No advertising.</li>
+        <li>No trackers.</li>
+        <li>No preconnect. <small>(download of third party content)</small></li>
+    </ul>    
+    <p>Data you provide will be stored in a database on the server. The connection to the server is secured using the HTTPS protocol. No data is stored in another location, nor will any data be transferred to other parties.<br>
+    To delete your data, you can use the corresponding built-in feature, which can be found in the settings menu of this application.</p>
+    <h3>Imprint</h3>
+    <p>Responsible person for this site:<br>
+    Fabian Ruin</p>    
+    <p>contact:<br>
+    info[æ]fablog.eu</p>
+
+    <div class="camouflage"></div>
+    `;
+
+const termsDe = `
+    <hr>
+    <h2 id="terms">Nutzungsbedingungen</h2>
+    <p>Diese Software wird in ihrem derzeitigen Zustand ohne jegliche Garantien bezüglich der Funktionalität bereitgestellt.</p>
+    <p>Zweck der Applikation ist die private Nutzung zum Senden von Textnachrichten über das Internet</p>
+    <p>Mit der Nutzung verpflichtest du dich zur Einhaltung folgender Regeln:</p>
+    <ul>
+        <li>Das unaufgeforderte Senden von Nachrichten ohne Einwilligung der ChatpartnerIn (Spam) ist untersagt.</li>
+        <li>Die gewerbliche Nutzung zu Werbezwecken oder zur Kundenaquise ist nicht zulässig.</li>
+        <li>Beiträge mit beleidigendem, erniedrigendem, rassistischem Inhalt oder Beiträge, die Personengruppen aufgrund ihrer Glaubensrichtung, ihrer sexuellen Neigungen oder politischen Überzeugungen ausgrenzen sind verboten, unabhängig davon ob sie eigenhändig verfasst oder weitergegeben werden.</li>
+        <li>Beiträge mit gewalttätigen, eindeutig pornographischen oder anderen strafbaren Inhalten sind verboten.</li>
+    </ul>
+    <p><i>ticker</i> behält sich vor, Nachrichten zu entfernen, die gegen die obigen Richtlinien verstoßen und/oder deren UrheberInnen für die Nutzung der App zu sperren.</p>
+    <h3>Datenschutz</h3>
+    <p><b>Ganz einfach.</b></p>
+    <ul>
+        <li>Keine Werbung.</li>
+        <li>Keine Tracker.</li>
+        <li>Kein preconnect. <small>(Download von Drittanbieter-Inhalten)</small></li>
+    </ul>    
+    <p>Daten, die Sie angeben, werden in einer Datenbank auf dem Server gespeichert. Die Verbindung zum Server ist mithilfe des https-Protokolls abgesichert. Es werden keine Daten an anderer Stelle gespeichert oder weitergegeben.<br>
+    Um Ihre Daten zu löschen, nutzen Sie die entsprechende Funktionalität innerhalb der App, die Sie in den Einstellunge finden.</p>
+    <h3>Impressum</h3>
+    <p>Verantwortliche Person:<br>
+    Fabian Ruin</p>    
+    <p>Kontakt:<br>
+    info[æ]fablog.eu</p>
+
+    <div class="camouflage"></div>
+    `
 
 toggleLanguage(config.language, "self");
