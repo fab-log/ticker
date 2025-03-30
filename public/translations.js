@@ -94,12 +94,12 @@ const toggleLanguage = (code, triggerSource) => {
 const manualEn = `
 <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal()">
 
-<div>
-    <h3><b>Content</b></h3>
-        <p>- <a href="#manual">Manual</a><br></p>
-        <p>- <a href="#imprint">Imprint</a><br></p>
-        <p>- <a href="#privacy">Privacy</a><br></p>
-        <p>- <a href="#terms">Terms of Use</a></p>
+<div style="line-height: 0.8;">
+    <h4><b>Content - quick access</b></h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#manual">Manual</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#imprint">Imprint</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#privacy">Privacy</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#terms">Terms of Use</a></p>
     <hr>
 </div>
 
@@ -118,12 +118,16 @@ Once you have two or more contacts, you can start a group chat. Give the group a
 
 <h3>Messages</h3>
 
+<p><b>Retrieving Messages</b><br>
+As long as the browser window is open, <i>ticker</i> checks for new messages every two minutes.¹ However, you can also manually refresh messages by clicking/tapping the icon with the two circular arrows at the top. Additionally, you can adjust the automatic update interval in the settings.</p>
+<p class="small">¹ Depending on the device and settings, other factors such as power-saving mode or do-not-disturb mode may affect whether and how long <i>ticker</i> remains active in the background.</p>
+
 <p><b>Sending messages</b><br>
 Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.</p>
 
 <p><b>Formatting and morse code</b><br>
 <i>ticker</i> provides simple text formatting similar to markdown syntax.</p>
-<ul>
+<ul style="line-height: 2;">
     <li><span class="mark"># Heading</span> converts to <span style="font-size: 1.25rem;"><b>Heading</b></span></li>
     <li><span class="mark">*italic*</span> converts to <i>italic</i></li>
     <li><span class="mark">**bold**</span> converts to <b>bold</b></li>
@@ -131,14 +135,19 @@ Select a chat by clicking or tapping on it to enter the chat. Write a message in
 </ul>
 <p>In case you like the encryption you can add <i>[morse]</i> to the end of a message and it will be translated to morse code.</p>
 
+<p><b>Send images or music files</b><br>
+Left to the input field you find a paperclip icon. Click or tap it to attach an image or a music file to a message. While typical file types are allowed for images, for music files only <i>mp3</i> is accepted. The maximum file size is limited to 25 MB.<br>
+The file name becomes the default text sent along with the message. If you want to change or add further text you can use the editing method described below</p>
+
 <p><b>Editing and Deleting</b><br>
 If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.<br>
 Note that you can only modify your own messages afterward.</p>
 
-<p><b>Retrieving Messages</b><br>
-As long as the browser window is open, <i>ticker</i> checks for new messages every two minutes.¹ However, you can also manually refresh messages by clicking/tapping the icon with the two circular arrows at the top. Additionally, you can adjust the automatic interval in the settings.</p>
+<p><b>Forwarding</b><br>
+From the context menu, accessible by pressing and holding a message (right click on PCs), you can pick the forwarding option. Edit the message text to your needs and choose one or multiple chat partners by checking the check box next to the name.</p>
 
-<p class="small">¹ Depending on the device and settings, other factors such as power-saving mode or do-not-disturb mode may affect whether and how long <i>ticker</i> remains active in the background.</p>
+<p><b>Reply</b><br>
+In case you want to reply to a specific message you can do so by pressing and holding it (right click on PCs) and choose 'reply' from the context menu. Add your text and send the message. The original message will be quoted in your reply.</p>
 
 <p><b>Learn more about your chat partners</b><br>
 On top of the chat messages you find the name of your chat partner or the chat group. Klick or tap on that name to get more information about them.</p>
@@ -224,12 +233,12 @@ On devices used by multiple people, it may be advisable to log out after use. Th
 const manualDe = `
 <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal()">
 
-<div>
-    <h3><b>Inhalt</b></h3>
-        <p>- <a href="#manual">Bedienung</a></p>
-        <p>- <a href="#imprint">Impressum</a></p>
-        <p>- <a href="#privacy">Datenschutz</a></p>
-        <p>- <a href="#terms">Nutzungsbedingungen</a></p>
+<div style="line-height: 1;">
+    <h4><b>Inhalt - Schnellzugriff</b></h4>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#manual">Bedienung</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#imprint">Impressum</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#privacy">Datenschutz</a></p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#terms">Nutzungsbedingungen</a></p>
     <hr>
 </div>
 
@@ -249,12 +258,16 @@ Sobald du zwei oder mehr Kontakte hast, kannst du einen Gruppenchat starten. Gib
 
 <h3>Nachrichten</h3>
 
+<p><b>Nachrichten abrufen</b><br>
+Solange das Browserfenster geöffnet ist, prüft <i>ticker</i> alle zwei Minuten, ob neue Nachrichten vorliegen.¹ Du kannst die Nachrichten jedoch auch selbst aktualisieren, indem du oben auf das Symbol mit den beiden kreisförmigen Pfeilen klickst / tippst. Zusätzlich kannst du das automatische Intervall in den Einstellungen anpassen.</p>
+<p class="small">¹ Je nach Gerät und Einstellungen beeinflussen andere Faktoren wie Energiesparmodus oder Nicht-Stören-Modus, ob und wie lange <i>ticker</i> im Hintergrund aktiv ist.</p>
+
 <p><b>Nachrichten schicken</b><br>
 Wähle einen Chat durch Anklicken oder Antippen aus, um in den Chat zu gelangen. Schreibe eine Nachricht in das Eingabefeld. Mit dem dreieckigen Pfeil rechts daneben schickst du die Nachricht ab.</p>
 
 <p><b>Formatierung und Morsecode</b><br>
 <i>ticker</i> bietet eine einfache Textformatierung ähnlich der Markdown-Syntax.</p>
-<ul>
+<ul style="line-height: 2;">
     <li><span class="mark"># Überschrift</span> wird zu <span style="font-size: 1.4rem;"><b>Überschrift</b></span></li>
     <li><span class="mark">*kursiv*</span> wird zu <i>kursiv</i></li>
     <li><span class="mark">**fett**</span> wird zu <b>fett</b></li>
@@ -262,14 +275,19 @@ Wähle einen Chat durch Anklicken oder Antippen aus, um in den Chat zu gelangen.
 </ul>
 <p>Für den Fall, dass du Geheimsprachen magst, kannst du <i>[morse]</i> ans Ende deiner Nachricht anfügen. Dann wird sie in den Morse-Code übersetzt.</p>
 
+<p><b>Bilder und Musik verschicken</b><br>
+Links neben dem Eingabefeld, siehst du ein Büroklammer-Symbol. Klicke oder tippe darauf, um eine Bild- oder Musikdatei anzuhängen. Für Bilder sind gängige Dateitypen erlaubt, für Musik wird nur <i>mp3</i> akzeptiert. Die Dateigröße ist auf 25 MB beschränkt.<br>
+Standardmäßig wird der Dateiname als Nachrichtentext mitgesendet. Möchtest du diesen Text ergänzen oder ändern, kannst du das über die unten beschriebene Bearbeiten-Methode tun.</p>
 
 <p><b>Bearbeiten und Löschen</b><br>
 Möchtest du eine Nachricht bearbeiten oder löschen, so geht das über das Kontextmenü. Auf dem Smartphone oder Tablet tippst du dazu lange auf die betreffende Nachricht bis ein Fenster mit den beiden Möglichkeiten erscheint. Am PC funktioniert das mit einem Rechtsklick.<br>
 Beachte, dass du nur deine eigenen Nachrichten nachträglich verändern kannst.</p>
 
-<p><b>Nachrichten abrufen</b><br>
-Solange das Browserfenster geöffnet ist, prüft <i>ticker</i> alle zwei Minuten, ob neue Nachrichten vorliegen.¹ Du kannst die Nachrichten jedoch auch selbst aktualisieren, indem du oben auf das Symbol mit den beiden kreisförmigen Pfeilen klickst / tippst. Zusätzlich kannst du das automatische Intervall in den Einstellungen anpassen.</p>
-<p class="small">¹ Je nach Gerät und Einstellungen beeinflussen andere Faktoren wie Energiesparmodus oder Nicht-Stören-Modus, ob und wie lange <i>ticker</i> im Hintergrund aktiv ist.</p>
+<p><b>Weiterleiten</b><br>
+Im Kontextmenüe, das du aufrufst, indem du länger auf eine Nachricht drückst (am PC mit Rechtsklick), kannst du Nachrichten weiterleiten. Bearbeite den Nachrichtentext, falls gewünscht und wähle eine oder mehrere Chat-Partnerinnen, indem du ein Häkchen neben dem Namen setzt.</p>
+
+<p><b>Antworten</b><br>
+Wenn du auf eine bestimmte Nachricht antworten möchtest, kannst du sie länger drücken (Rechtsklick am PC) und im Kontextmenü 'Antworten' wählen. Schreibe eine Antwort und schicke sie ab. Die ursprüngliche Nachricht wird in deiner Antwort zitiert.</p>
 
 <p><b>Infos über ChatpartnerInnen</b><br>
 Oberhalb der Chatnachrichten siehst du den Namen deiner ChatpartnerIn oder der Gruppe. Klicke oder tippe darauf, um Informationen zu der Person / Gruppe zu erhalten.</p>

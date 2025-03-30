@@ -28,7 +28,6 @@ const confirmAccount = async (email, input, config) => {
         return;
     }
     currentUser = serverResponse.data;
-    pLoggedInUser.innerHTML = currentUser.email.at(-1)[2];
     modal.innerHTML = "";
     closeModal();
     renderOverview();
@@ -39,11 +38,8 @@ const confirmAccount = async (email, input, config) => {
     imgOverviewHeaderPlus.style.display = "block";
     imgOverviewHeaderUpdate.style.display = "block";
     menuPersonal.style.display = "block";
-    pLoggedInUser.innerHTML = currentUser.email.at(-1)[2];
+    pLoggedInUser.innerHTML = `<b>${currentUser.firstName.at(-1)[2]} ${currentUser.lastName.at(-1)[2]}</b> <span class="small">(${currentUser.email.at(-1)[2]})</span>`;
     applyConfig();    
-    // await getConnectedUsers(); 
-    // await getChats();
-    // renderOverview();
 }
 
 const verifyEmail = (email) => {
@@ -126,11 +122,9 @@ const verifyEmail = (email) => {
             return;
         }
         if (inpVerifyEmailAllowNotifications.checked) {
-            startLoader();
-            showAlert(lang("Please also grant notifications in your browser", "Bitte stimme den Benachrichtigungen auch in deinem Browser zu"), 5000);
+            Notification.requestPermission();
+            showAlert(lang("Please also grant notifications in your browser", "Bitte stimme den Benachrichtigungen auch in deinem Browser zu"));
             config.notifications = true;
-            await Notification.requestPermission();
-            stopLoader();
         } else {
             config.notifications = false;
         }
@@ -359,8 +353,8 @@ const login = async (event) => {
     let serverResponse = await response.json();
     let status = serverResponse.status;
     console.log({ status });
-    stopLoader();
     if (serverResponse.status != "OK") {
+        stopLoader();
         showAlert(status);
         frmLogin.reset();
         return;
@@ -381,10 +375,11 @@ const login = async (event) => {
     imgOverviewHeaderPlus.style.display = "block";
     imgOverviewHeaderUpdate.style.display = "block";
     menuPersonal.style.display = "block";
-    pLoggedInUser.innerHTML = currentUser.email.at(-1)[2];
+    pLoggedInUser.innerHTML = `<b>${currentUser.firstName.at(-1)[2]} ${currentUser.lastName.at(-1)[2]}</b> <span class="small">(${currentUser.email.at(-1)[2]})</span>`;
     applyConfig();    
     await getConnectedUsers(); 
     await getChats();
+    stopLoader();
     renderOverview();
     if (window.innerWidth > 1024 && chats.length > 0) {
 		renderChat(chats.at(-1).id);
@@ -467,8 +462,8 @@ const quickLogin = async (id) => {
     let serverResponse = await response.json();
     let status = serverResponse.status;
     console.log({ status });
-    stopLoader();
     if (status != "OK") {
+        stopLoader();
         showAlert(status);
         renderModalLogin();
         return;
@@ -480,10 +475,11 @@ const quickLogin = async (id) => {
     imgOverviewHeaderPlus.style.display = "block";
     imgOverviewHeaderUpdate.style.display = "block";
     menuPersonal.style.display = "block";
-    pLoggedInUser.innerHTML = currentUser.email.at(-1)[2];
+    pLoggedInUser.innerHTML = `<b>${currentUser.firstName.at(-1)[2]} ${currentUser.lastName.at(-1)[2]}</b> <span class="small">(${currentUser.email.at(-1)[2]})</span>`;
     applyConfig();
     await getConnectedUsers(); 
     await getChats();
+    stopLoader();
     renderOverview();
     if (window.innerWidth > 1024 && chats.length > 0) {
         renderChat(chats.at(-1).id);
@@ -843,13 +839,12 @@ const checkLocalStorage = () => {
     console.log("### => fn checkLocalStorage triggered");
     if (!localStorage.getItem("tickerConfig")) {
         return;
+    }
+    let tickerConfig = JSON.parse(localStorage.getItem("tickerConfig"));
+    if (tickerConfig.id) {
+        quickLogin(tickerConfig.id)
     } else {
-        let tickerConfig = JSON.parse(localStorage.getItem("tickerConfig"));
-        if (tickerConfig.id) {
-            quickLogin(tickerConfig.id)
-        } else {
         return;
-        }
     }
 }
 
@@ -864,7 +859,7 @@ const startApp = () => {
     setTimeout(() => {
         main.classList.add("opacity-1");
         main.style.display = "block";        
-    }, 250);
+    }, 500);
     /* if (Object.keys(currentUser).length === 0) {
         hideHeaderIcons();
         showHome();

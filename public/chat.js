@@ -2,6 +2,8 @@ const divChat = document.querySelector(".chat");
 const divOverview = document.querySelector(".overview");
 const chatItems = document.querySelector(".chat-items");
 let currentChat = {};
+let currentAttachment = "";
+let currentMessage = {};
 let renderChatCounter = 0;
 
 const getChat = async (chatId) => {
@@ -146,7 +148,7 @@ const renderOverview = () => {
 			hue = e.hue;
 			morseLetter1 = translateToMorse("e");
 			morseLetter2 = translateToMorse("i");
-			borderType = "dashed";
+			borderType = "dotted";
 		} else {
 			if (connectedUsers[index].userName === "") {
 				name = `${connectedUsers[index].firstName} ${connectedUsers[index].lastName}`
@@ -188,13 +190,13 @@ const renderOverview = () => {
 			<div class="overview-item" id="overview-item_${e.id}" onclick="getAndRenderChat('${e.id}')">
 				<div>
 					${badgeHtml}
-					<div class="personal-label" style="rotate: ${randomRotation}deg; border: 3px ${borderType} hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+					<div class="personal-label" style="rotate: ${randomRotation}deg; border: 3px ${borderType} hsl(${hue}, 33%, ${coloredTextBrightness}%);">
 						<div class="morse-container first-row">${morseLetter1}</div>
 						<div class="morse-container">${morseLetter2}</div>
 					</div>
 				</div>
 					<div>
-						<p><span class="overview-name" style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%);">${name}</span><span class="timestamp">${lastMessageTimestamp}</span><br>${lastMessageText}</p>
+						<p><span class="overview-name" style="color: hsl(${hue}, 33%, ${coloredTextBrightness}%);">${name}</span><span class="timestamp">${lastMessageTimestamp}</span><br>${lastMessageText}</p>
 					</div>
 			</div>
 		`);
@@ -217,7 +219,205 @@ const getAndRenderChat = async (id) => {
 	renderChat(id);
 }
 
-const modalContextMenuMessage = document.querySelector(".modal-context-menu-message");
+const forwardMessage = async () => {
+	console.log(`### fn forwardMessage ${currentMessage.id} triggered`);
+	const forwardChecked = document.querySelectorAll(".inpForwardTo");
+	const taForwardMessage = document.querySelector("#taForwardMessage");
+	const forwardTo = [];
+	forwardChecked.forEach(e => {
+		if (e.checked) forwardTo.push(e.id);
+	});
+	if (currentMessage.attachment) {
+		if (taForwardMessage.value === "" && currentMessage.attachment === "") {
+			showAlert(lang("Has Attachment. Please enter a message text.", "Bitte gib einen Nachrichtentext ein."));
+			return;
+		}
+	} else if (taForwardMessage.value === "") {
+		showAlert(lang("Please enter a message text.", "Bitte gib einen Nachrichtentext ein."));
+		return;
+	}
+	
+	if (forwardTo.length === 0) {
+		showAlert(lang("Please select at least one chat.", "Bitte wähle mindestens einen Chat aus"));
+		return;
+	}
+	for (let i = 0; i < forwardTo.length; i++) {
+		let index = chats.findIndex(e => e.id === forwardTo[i]);
+		let newMessage = {};
+		newMessage.id = `msg_${Date.now()}_${randomCyphers(12)}`
+		newMessage.author = currentUser.id;
+		newMessage.text = [[Date.now(), taForwardMessage.value]];
+		newMessage.attachment = currentMessage.attachment ? currentMessage.attachment : "";
+		newMessage.forwarded = true;
+		// console.log({ newMessage });
+		chats[index].messages.push(newMessage);
+
+		let data = {
+			userId: currentUser.id,
+			chat: chats[index]
+		};
+
+		console.log({ data });
+	
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(data),
+		};
+		const response = await fetch("/ticker.updateChat", options);
+		let serverResponse = await response.json();
+		let status = serverResponse.status;
+		if (status != "OK") {
+			showAlert(status);
+			return;
+		}
+		console.log({ status });
+	}
+	closeAllModals();
+	renderOverview();
+	renderChat(chats.at(-1).id);
+}
+
+const renderForwardMessageMenu = (messageId) => {
+	let index = currentChat.messages.findIndex(e => e.id === messageId);
+	currentMessage = currentChat.messages[index];
+
+	let attachmentString = "";
+	let thisAttachment = currentChat.messages[index].attachment;
+	if (thisAttachment && thisAttachment != "" && (
+		thisAttachment.toLowerCase().endsWith(".png") || 
+		thisAttachment.toLowerCase().endsWith(".jpeg") || 
+		thisAttachment.toLowerCase().endsWith(".jpeg") || 
+		thisAttachment.toLowerCase().endsWith(".webp"))) {
+		attachmentString = `
+			<p>${lang("Attachment", "Anhang")}</p>
+			<img src="/ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
+			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
+			<hr>
+		`;
+	} else if (thisAttachment && thisAttachment != "" && thisAttachment.toLowerCase().endsWith(".mp3")) {
+		attachmentString = `
+			<p>${lang("Attachment", "Anhang")}</p>
+			<audio controls src="/ticker_db/${thisAttachment}"></audio>
+			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
+			<hr>
+		`;
+	}
+
+	let currentMessageString = currentMessage.text.at(-1)[1].startsWith("⤵\n") ? currentMessage.text.at(-1)[1] : "⤵\n" + currentMessage.text.at(-1)[1];
+	let messageString = `
+		<textarea id="taForwardMessage" maxlength="10000" rows="6" style="width: calc(100% - 30px)">${currentMessageString}</textarea>
+	`;
+
+	let chatsString = "";
+	chats.forEach(e => {
+		if (e.id === currentChat.id) return;	// exclude current chat
+		let nameString = "";
+		if (e.groupName != "") {
+			nameString = e.groupName + lang(" (group)", " (Gruppe)");
+		} else {
+			let chatPartner = e.participants.find(el => el[1] != currentUser.id);
+			let chatPartnerId = chatPartner[1];
+			let index = connectedUsers.findIndex(el => el.id === chatPartnerId);
+			if (index === -1) return;
+			nameString += `${connectedUsers[index].firstName} ${connectedUsers[index].lastName}`;
+			if (connectedUsers[index].userName != "") nameString += ` (${connectedUsers[index].userName})`;
+		}
+		chatsString += `
+			<div class="searchResultItem">
+				<label for="${e.id}">
+					<p style="text-align: left;">
+					<input type="checkbox" class="inpForwardTo" id="${e.id}">
+					${nameString}
+					</p>
+				</label>
+			</div>
+			`;
+	});
+	toggleModal();	
+	modal.style.display = "block";
+	modal.innerHTML = `
+		<img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="toggleModal()">
+		<div class="menu-heading">
+			<img src="pix/icon_forward.webp" alt="forward" class="menu-icon">
+			<h3>${lang("Forward message", "Nachricht weiterleiten")}</h3>
+		</div>
+		<hr>
+		${attachmentString}
+		<p>${lang("Message text", "Nachrichtentext")}</p>
+		${messageString}
+		<hr>
+		<p>${lang("forward to", "weiterleiten an")}</p>
+		${chatsString}
+		<hr>
+		<button onclick="closeModal(); showHeaderIcons()">${lang("dismiss", "abbrechen")}</button>
+		<button onclick="forwardMessage()">${lang("forward", "weiterleiten")}</button>
+		<div class="camouflage"></div>
+	`;
+	console.log({ currentMessage });
+}
+
+const replyToMessage = (id) => {
+	console.log("replyToMessage " + id + " triggered");
+	const taReplyToMessage = document.querySelector("#taReplyToMessage");
+	if (sanitize(taReplyToMessage.value.trim()) === "") {
+		showAlert(lang("Please enter a text", "Bitte einen Text eingeben"));
+		return;
+	}
+
+	let index = currentChat.messages.findIndex(e => e.id === id);
+	let text = sanitize(taReplyToMessage.value.trim().substring(0, 10000));
+
+	let reply = {
+		id: `msg_${Date.now()}_${randomCyphers(12)}`,
+		author: currentUser.id,
+		text: [[Date.now(), text]],
+		replyTo: currentChat.messages[index].id
+	}
+
+	currentChat.messages.push(reply);
+	closeModal();
+	renderOverview();
+	renderChat(currentChat.id);
+}
+
+const renderReplyToMessage = (id) => {
+	let index = currentChat.messages.findIndex(e => e.id === id);
+	let thisAttachment = currentChat.messages[index].attachment;
+	let attachmentString = "";
+	if (thisAttachment && thisAttachment != "") {
+		attachmentString = `
+			<p class="small">${lang("Attachment:", "Anhang:")} ${thisAttachment.substring(31)}</p>
+			<hr>		
+		`;
+	}
+	let text = currentChat.messages[index].text.at(-1)[1];
+	let textString = text.length > 100 ? text.substring(0, 100) + " ..." : text;
+	modal.innerHTML = `
+		<img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="toggleModal()">
+		<div class="menu-heading">
+			<img src="pix/icon_forward.webp" alt="reply" class="menu-icon" style="rotate: 90deg;">
+			<h3>${lang("Reply to message", "Auf Nachricht Antworten")}</h3>
+		</div>
+		<hr>
+		<p>${lang("You reply to", "Du antwortest auf")}</p>
+		<p><img src="pix/quotationMark.webp" class="icon" style="width: 15px;"></img>
+		<i>${textString}</i>
+		<img src="pix/quotationMark.webp" class="icon" style="width: 15px; margin-left: 12px; rotate: 180deg;"></p>
+		<hr>
+		${attachmentString}
+		<p>${lang("Message text", "Nachrichtentext")}</p>
+		<textarea id="taReplyToMessage" rows="4" maxlength="10000" placeholder="${lang("ticker your answer here", "ticker deine Antwort hier")}" style="width: calc(100% - 30px);"></textarea>
+		<hr>
+		<button type="button" onclick="closeModal()">${lang("dismiss", "abbrechen")}</button>
+		<button type="button" onclick="replyToMessage('${id}')">${lang("reply", "antworten")}</button>
+		<div class="camouflage"></div>
+	`;
+	toggleModal();
+	closeModalContext();
+}
 
 const editMessage = (id) => {
 	console.log("editMessage " + id + "triggered");
@@ -230,7 +430,6 @@ const editMessage = (id) => {
 	}
 	let editedMessage = sanitize(ta.value.trim().substring(0, 10000));
 	currentChat.messages[index].text.push([Date.now(), editedMessage]);
-	updateChat();
 	closeModal();
 	renderOverview();
 	renderChat(currentChat.id);
@@ -238,34 +437,55 @@ const editMessage = (id) => {
 
 const renderModalEditMessage = (id) => {
 	let index = currentChat.messages.findIndex(e => e.id === id);
+	let attachmentString = "";
+	let thisAttachment = currentChat.messages[index].attachment;
+	if (thisAttachment && thisAttachment != "" && (
+		thisAttachment.toLowerCase().endsWith(".png") || 
+		thisAttachment.toLowerCase().endsWith(".jpeg") || 
+		thisAttachment.toLowerCase().endsWith(".jpeg") || 
+		thisAttachment.toLowerCase().endsWith(".webp"))) {
+		attachmentString = `
+			<p>${lang("Attachment", "Anhang")}</p>
+			<img src="/ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
+			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
+			<hr>
+		`;
+	} else if (thisAttachment && thisAttachment != "" && thisAttachment.toLowerCase().endsWith(".mp3")) {
+		attachmentString = `
+			<p>${lang("Attachment", "Anhang")}</p>
+			<audio controls src="/ticker_db/${thisAttachment}"></audio>
+			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
+			<hr>
+		`;
+	}
 	let text = currentChat.messages[index].text.at(-1)[1];
 	modal.innerHTML = `
+		<img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="toggleModal()">
 		<div class="menu-heading">
 			<img src="pix/icon_edit.webp" alt="edit" class="menu-icon">
 			<h3>${lang("Edit message", "Nachricht bearbeiten")}</h3>
 		</div>
-		<textarea id="ta" rows="4" maxlength="10000" style="width: calc(100% - 48px);">${text}</textarea>
+		<hr>
+		${attachmentString}
+		<p>${lang("Message text", "Nachrichtentext")}</p>
+		<textarea id="ta" rows="4" maxlength="10000" style="width: calc(100% - 30px);">${text}</textarea>
 		<hr>
 		<button type="button" onclick="closeModal()">${lang("dismiss", "abbrechen")}</button>
 		<button type="button" onclick="editMessage('${id}')">${lang("update", "ändern")}</button>
+		<div class="camouflage"></div>
 	`;
 	toggleModal();
-	modalContextMenuMessage.style.display = "none";
+	closeModalContext();
 }
 
-const deleteMessage = (id) => {
-	console.log("deleteMessage " + id + "triggered");
-	modalContextMenuMessage.style.display = "none";
-}
+const modalContextMenuMessage = document.querySelector(".modal-context-menu-message");
 
 const closeModalContext = () => {
 	modalContextMenuMessage.style.display = "none";
 }
 
-
-
-const confirmDeleteMessage = async (id) => {
-	console.log("confirmDeleteMessage " + id + "triggered");
+const deleteMessage = async (id) => {
+	console.log("confirmDeleteMessage " + id + " triggered");
 	modalContextMenuMessage.innerHTML = `
 	<p>${lang("Sure you want to delete the message?", "Sicher dass du die Nachricht löschen möchtest?")}</p>
 	<hr>
@@ -277,30 +497,43 @@ const confirmDeleteMessage = async (id) => {
 		showAlert(lang("internal error", "App-Fehler"));
 		return;
 	}
+	if (currentChat.messages[index].attachment && currentChat.messages[index].attachment != "" && currentChat.messages[index].forwarded != true) removeAttachment(currentChat.messages[index].attachment);
 	currentChat.messages.splice(index, 1);
 	await updateChat();
+	renderOverview();
 	renderChat(currentChat.id);
-	modalContextMenuMessage.style.display = "none";
+	closeModalContext();
 }
 
 const contextMessage = (event, id) => {
 	event.preventDefault();
 	console.log("contextmenu triggered. Message " + id);
 	let index = currentChat.messages.findIndex(e => e.id === id);
-	if (currentChat.messages[index].author != currentUser.id) {
-		showAlert(lang("You can only edit your own messages", "Du kannst nur deine eigenen Nachrichten bearbeiten"), 5000);
-		closeModalContext();
-		return;
+	let contextString = `
+		<p onclick="renderReplyToMessage('${id}')">${lang("reply", "antworden")}</p>
+		<hr>
+		<p onclick="renderForwardMessageMenu('${id}')">${lang("forward message", "Nachricht weiterleiten")}</p>
+	`;
+	if (currentChat.messages[index].author === currentUser.id) {
+		contextString += `
+			<hr>
+			<p onclick="renderModalEditMessage('${id}')">${lang("edit message", "Nachricht bearbeiten")}</p>
+			<hr>
+			<p onclick="deleteMessage('${id}')">${lang("delete message", "Nachricht löschen")}</p>
+		`;
 	}
-	let editMessageString = lang("edit message", "Nachricht bearbeiten");
-	let deleteMessageString = lang("delete message", "Nachricht löschen");
-	modalContextMenuMessage.innerHTML = `<p onclick="renderModalEditMessage('${id}')">${editMessageString}</p><hr><p onclick="confirmDeleteMessage('${id}')">${deleteMessageString}</p>`;
+	modalContextMenuMessage.innerHTML = contextString;
 	modalContextMenuMessage.style.display = "block";
-	window.onclick = function(event) {
-		if (event.target != modalContextMenuMessage) {
+	window.addEventListener('click', (event) => {
+		if (event.target !== modalContextMenuMessage) {
 			closeModalContext();
 		}
-	};
+	});
+	/* window.addEventListener('touchstart', (event) => {
+		if (event.target !== modalContextMenuMessage) {
+			closeModalContext();
+		}
+	}); */
 }
 
 const changeGroupColor = () => {
@@ -308,7 +541,7 @@ const changeGroupColor = () => {
 	const groupPersonalLabel = document.querySelector("#groupPersonalLabel");
 	const groupColorValue = document.querySelector("#groupColorValue");
 	let hue = inpGroupColor.value;
-	groupPersonalLabel.style.border = `3px dashed hsl(${Number(hue)}, 25%, ${coloredTextBrightness}%)`;
+	groupPersonalLabel.style.border = `3px dotted hsl(${Number(hue)}, 33%, ${coloredTextBrightness}%)`;
 	groupColorValue.innerHTML = hue;
 }
 
@@ -395,7 +628,7 @@ const renderModalEditGroup = () => {
 				<p class="small">Hue: <span id="groupColorValue">${hue}</span></p>
 			</div>
 			<div>
-				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dashed hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dotted hsl(${hue}, 33%, ${coloredTextBrightness}%);">
 					<div class="morse-container first-row">${morseLetter1}</div>
 					<div class="morse-container">${morseLetter2}</div>
 				</div>
@@ -458,11 +691,107 @@ const renderModalConfirmRemoveGroup = () => {
 			<h3 style="color: var(--accent-orange);">${lang("Warning!", "Warnung!")}</h3>
 		</div>
 		<h4>${lang("This will permanently remove the group.", "Dadurch wird die Gruppe dauerhaft gelöscht.")}</h4>
-		<h3 style="color: hsl(${currentChat.hue}, 25%, ${coloredTextBrightness}%);">${currentChat.groupName}</h3>
+		<h3 style="color: hsl(${currentChat.hue}, 33%, ${coloredTextBrightness}%);">${currentChat.groupName}</h3>
 		<hr>
 		<button type="button" onclick="closeModal(); showHeaderIcons()">${lang("dismiss", "abbrechen")}</button>
 		<button type="button" onclick="removeChat()" style="background-color: var(--accent-orange);">${lang("permanently remove group", "Gruppe endgültig löschen")}</button>
 	`
+}
+
+const attachFile = () => {
+	console.log("### => fn attachFile triggered");
+	const inpFileUpload = document.querySelector("#inpFileUpload");
+	inpFileUpload.click();
+	inpFileUpload.addEventListener('change', async (event) => {
+		console.time("attachFile");
+		const file = event.target.files[0];
+
+		if (file.size > 25 * 1024 * 1024) {
+			showAlert(lang("File must not exceed 25 MB.", "Datei darf nicht größer als 25 MB sein."));
+			return;
+		}
+
+		startLoader();
+
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('userId', currentUser.id);
+
+		const options = {
+			method: "POST",
+			body: formData
+		};
+
+		const response = await fetch("/ticker.upload", options);
+		let serverResponse = await response.json();
+		let status = serverResponse.status;
+		console.log({ status });
+		stopLoader();
+		if (serverResponse.status != "OK") {
+			showAlert(status);
+			console.timeEnd("attachFile");
+			return;
+		} else {
+			currentAttachment = serverResponse.attachmentId;
+			document.querySelector("#taMessageInput").value = currentAttachment.substring(31);
+			sendMessage();
+		}
+		console.timeEnd("attachFile");
+	});
+}
+
+const removeAttachment = async (id) => {
+	console.log(`### => fn removeAttachment triggered`)
+	let data = {
+		id
+	}
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(data),
+	};
+	const response = await fetch("/ticker.removeAttachment", options);
+	let serverResponse = await response.json();
+}
+
+/* const getAttachment = async (id) => {
+	console.log(`### => fn getAttachment ${id} triggered`);
+	let data = {
+		attachmentId: id
+	};
+
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(data),
+	};
+	const response = await fetch("/ticker.removeChat", options);
+	let serverResponse = await response.json();
+	let status = serverResponse.status;
+	// stopLoader();
+	if (status != "OK") {
+		showAlert(status);
+		return;
+	}
+} */
+
+const closeMaxImage = () => {
+	const maxImage = document.querySelector(".max-image");
+	maxImage.style.display = "none";
+	maxImage.innerHTML = "";
+}
+
+const maxImage = (id) => {
+	const maxImage = document.querySelector(".max-image");
+	maxImage.style.display = "block";
+	maxImage.innerHTML = `
+		<img src="pix/x.webp" alt="close" title="close" class="close-modal" style="margin: 12px;" onclick="closeMaxImage()">
+		<img src="/ticker_db/${id}" class="full-size">
+	`;
 }
 
 const renderChat = async (chatId) => {
@@ -507,7 +836,6 @@ const renderChat = async (chatId) => {
 		if (text.substring(length - 7, length).toLowerCase() === "[morse]") {
 			morse = `<hr class="hr-in-message">${translateToMorse(text.substring(0, length - 7))}`;
 			text = text.substring(0, length - 7);
-
 		}
 		if (currentChat.messages[i].author != currentUser.id) {
 			inOut = "in";
@@ -528,9 +856,49 @@ const renderChat = async (chatId) => {
 			author = lang("me", "Ich")
 		}
 
+		let file = "";
+		if (currentChat.messages[i].attachment) {
+			let attachment = currentChat.messages[i].attachment;
+			let path = "/ticker_db";
+			if (attachment != "" && (attachment.substring(attachment.length - 4).toLowerCase() === ".png" || attachment.substring(attachment.length - 4).toLowerCase() === ".jpg" || attachment.substring(attachment.length - 5).toLowerCase() === ".jpeg" || attachment.substring(attachment.length - 5).toLowerCase() === ".webp")) {
+				file = `<img src="${path}/${attachment}" alt="${text}" onclick="maxImage('${attachment}')" onerror="this.onerror=null; this.src='pix/not_found.webp';"><br>`;
+			} else if (attachment != "" && attachment.substring(attachment.length - 4).toLowerCase() === ".mp3") {
+				file = `<audio controls src="${path}/${attachment}"></audio><br>`;
+			}
+		}
+
+		let replyString = "", originalMessageString = "";
+		if (currentChat.messages[i].replyTo) {
+			let originalMessageIndex = currentChat.messages.findIndex(e => e.id === currentChat.messages[i].replyTo);
+			let originalMessage = currentChat.messages[originalMessageIndex];
+			if (originalMessage.attachment && originalMessage.attachment != "") originalMessageString += `📎 ${originalMessage.attachment.substring(31)}<br>`;
+			originalMessageString += originalMessage.text.at(-1)[1];
+			originalMessageString = originalMessageString.length > 100 ? originalMessageString.substring(0, 100) + " ..." : originalMessageString;
+			let authorHue, authorFirstName;
+			let originalAuthorId = originalMessage.author;
+			let authorIndex = connectedUsers.findIndex(e => e.id === originalAuthorId);
+			console.log({ originalAuthorId });
+			if (originalAuthorId === currentUser.id) {
+				authorHue = currentUser.config.hue;
+				authorFirstName = lang("me", "Ich");
+			}
+			else if (authorIndex === -1) {
+				authorHue = "0";
+				authorFirstName = lang("[unknown]", "[unbekannt]");
+			} else {
+				authorHue = connectedUsers[authorIndex].hue;
+				authorFirstName = connectedUsers[authorIndex].firstName;
+			}
+			replyString = `
+				<p class="reply small" style="margin: 6px;"><b><span style="color: hsl(${authorHue}, 33%, ${coloredTextBrightness}%)";>${authorFirstName}</span></b>: <i>${originalMessageString}</i></p>
+			`;
+		}
+
 		chatItems.insertAdjacentHTML("beforeend", `
 			<div class="chat-item ${inOut}" id="${currentChat.messages[i].id}">
-				<p><span class="overview-name" style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%)">${author}</span><span class="timestamp">${dateAndTimeToString(currentChat.messages[i].text.at(-1)[0])}</span><br>
+				<p><span class="overview-name" style="color: hsl(${hue}, 33%, ${coloredTextBrightness}%)">${author}</span><span class="timestamp">${dateAndTimeToString(currentChat.messages[i].text.at(-1)[0])}</span><br>
+				${replyString}
+				${file}
 				${format(text)}</p>${morse}
 			</div>
 		`);
@@ -538,17 +906,35 @@ const renderChat = async (chatId) => {
 		if (i >= currentChat.messages.length - 10) {
 			document.querySelector(`#${lastMessageId}`).classList.add("slide-in-from-top");
 		}
-		document.querySelector(`#${currentChat.messages[i].id}`).addEventListener("contextmenu", () => {
+
+
+		const selectedMessage = document.querySelector(`#${currentChat.messages[i].id}`);
+
+		// Add contextmenu event listener for desktop and compatible devices
+		selectedMessage.addEventListener("contextmenu", (event) => {
+			event.preventDefault(); // Prevent default context menu
 			contextMessage(event, currentChat.messages[i].id);
-		})
+		});
+
+		/* selectedMessage.addEventListener("touchstart", (event) => {
+			touchTimer = setTimeout(() => {
+				event.preventDefault();
+				contextMessage(event, currentChat.messages[i].id);
+			}, 500);
+		});
+		
+		selectedMessage.addEventListener("touchend", () => {
+			clearTimeout(touchTimer); // Cancel if touch ends before 500ms
+		}); */
 	}
 
 	currentChat.messages.length > 3 && document.querySelector(`#${lastMessageId}`).scrollIntoView();
 
 	chatItems.insertAdjacentHTML("beforeend", `
 		<div class="message-input">
-			<textarea class="ta-message-input" id="taMessageInput" rows="3" maxlength="10000" placeholder="${lang(" ... ticker your message here ...", " ... ticker deine Nachricht hier ...")}"></textarea>
-			<img src="pix/play.webp" alt="send message" title="${lang("send message", "Nachricht absenden")}" id="imgSendMessage" style="filter: sepia(100%) hue-rotate(${config.hue}deg) saturate(1.5); animation: pulse 1.25s ease-in-out infinite" onclick="sendMessage()">
+			<img src="pix/attachment.webp" alt="add attachment" id="img-attachment" style="width: 25px; place-self: center; filter: sepia(100%) hue-rotate(${config.hue}deg) saturate(1.5);" onclick="attachFile()">
+			<textarea class="ta-message-input" id="taMessageInput" rows="4" maxlength="10000" placeholder="${lang("ticker your message here", "ticker deine Nachricht hier")}"></textarea>
+			<img src="pix/play.webp" alt="send message" title="${lang("send message", "Nachricht absenden")}" id="imgSendMessage" style="filter: sepia(100%) hue-rotate(${config.hue}deg) saturate(1.5); place-self: center; animation: pulse 1.25s ease-in-out infinite" onclick="sendMessage()">
 		</div>
 	`);
 
@@ -568,7 +954,7 @@ const renderChat = async (chatId) => {
 				${currentChat.about}
 				<img src="pix/quotationMark.webp" class="icon" style="width: 15px; margin-left: 12px; rotate: 180deg;">`
 		}
-		pChatNameColor = `hsl(${currentChat.hue}, 25%, ${coloredTextBrightness}%)`;
+		pChatNameColor = `hsl(${currentChat.hue}, 33%, ${coloredTextBrightness}%)`;
 	} else {
 		let index = connectedUsers.findIndex(e => e.id === currentChat.participants[1][1]);
 		if (index === -1) {
@@ -580,7 +966,7 @@ const renderChat = async (chatId) => {
 		} else {
 			chatName = chatPartner.userName;
 		}
-		pChatNameColor = `hsl(${chatPartner.hue}, 25%, ${coloredTextBrightness}%)`;
+		pChatNameColor = `hsl(${chatPartner.hue}, 33%, ${coloredTextBrightness}%)`;
 	}
 	pChatName.style.color = pChatNameColor;
 	pChatName.innerHTML = chatName;
@@ -605,7 +991,7 @@ const renderChat = async (chatId) => {
 			} else {
 				about = `
 					<img src="pix/quotationMark.webp" class="icon" style="width: 15px;"></img>
-					<span style="color: hsl(${connectedUsers[index].hue}, 25%, ${coloredTextBrightness}%);">
+					<span style="color: hsl(${connectedUsers[index].hue}, 33%, ${coloredTextBrightness}%);">
 						<b><i>${connectedUsers[index].about.at(-1)}</i></b>
 					</span>
 					<img src="pix/quotationMark.webp" class="icon" style="width: 15px; margin-left: 12px; rotate: 180deg;">
@@ -627,7 +1013,7 @@ const renderChat = async (chatId) => {
 			morseLetter2 = translateToMorse("i");
 			hue = currentChat.hue;
 			let loop = 1;
-			borderType = "dashed";
+			borderType = "dotted";
 			currentChat.participants.forEach(e => {
 				let index2 = connectedUsers.findIndex(el => el.id === e[1]);
 				if (index2 === -1 && e[1] != currentUser.id) return;
@@ -659,11 +1045,11 @@ const renderChat = async (chatId) => {
 		modal.innerHTML = `
 			<img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="closeModal(); showHeaderIcons()">
 			<br>
-			<div class="personal-label" style="border: 3px ${borderType} hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+			<div class="personal-label" style="border: 3px ${borderType} hsl(${hue}, 33%, ${coloredTextBrightness}%);">
 				<div class="morse-container first-row">${morseLetter1}</div>
 				<div class="morse-container">${morseLetter2}</div>
 			</div>
-			<h3 style="color: hsl(${hue}, 25%, ${coloredTextBrightness}%);">${name}</h3>
+			<h3 style="color: hsl(${hue}, 33%, ${coloredTextBrightness}%);">${name}</h3>
 			<p>${about}</p>
 			<p>${members}${numberOfMessages}${lastSeen}</p>
 			${editButton}
@@ -702,7 +1088,8 @@ const sendMessage = async () => {
 		author: currentUser.id,
 		text: [
 			[Date.now(), messageText]
-		]
+		],
+		attachment: currentAttachment
 	}
 	currentChat.messages.push(newMessage);
 	await updateChat();
@@ -710,6 +1097,7 @@ const sendMessage = async () => {
 	renderOverview();
 	renderChat(currentChat.id);
 	taMessageInput.value = "";
+	currentAttachment = "";
 	window.innerWidth > 1024 && taMessageInput.focus();
 }
 
@@ -1065,7 +1453,7 @@ const renderModalNewGroup = (event) => {
 				<p class="small">Hue: <span id="groupColorValue">${hue}</span></p>
 			</div>
 			<div>
-				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dashed hsl(${hue}, 25%, ${coloredTextBrightness}%);">
+				<div class="personal-label" id="groupPersonalLabel" style="border: 3px dotted hsl(${hue}, 33%, ${coloredTextBrightness}%);">
 					<div class="morse-container first-row">${morseLetter1}</div>
 					<div class="morse-container">${morseLetter2}</div>
 				</div>

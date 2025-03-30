@@ -1,11 +1,11 @@
-const version = "0.3.0 (beta)";
+const version = "0.4.0 (beta)";
 const pVersion = document.querySelector("#pVersion");
 pVersion.innerHTML = version;
 
 let config = {
 	language: 1,
 	mode: "light",
-	hue: 50
+	hue: 30
 }
 
 let currentUser = {
@@ -42,7 +42,7 @@ const randomCyphers = (length) => {
 }
 
 // ### NEEDS TESTING! ###
-const sanitize = (string) => {
+/* const sanitize = (string) => {
 	return string.replace(/[&<>"'\/]/g, function (char) {
 	  switch (char) {
 		case '&':
@@ -73,16 +73,48 @@ const sanitize = (string) => {
 		  return char;
 	  }
 	});
+} */
+
+const sanitize = (string) => {
+    return string.replace(/[&<>"'\/{}[\]()]/g, (char) => {
+        switch (char) {
+            case '&':
+                return '&amp;';
+            case '<':
+                return '&lt;';
+            case '>':
+                return '&gt;';
+            case '{':
+                return '&#x7b;';
+            case '}':
+                return '&#x7d;';
+            case '[':
+                return '&#x5b;';
+            case ']':
+                return '&#x5d;';
+            case '(':
+                return '&#x28;';
+            case ')':
+                return '&#x29;';
+            case '"':
+                return '&quot;';
+            case "'":
+                return '&#39;';
+            case '/':
+                return '&#x2F;';
+            default:
+                return char;
+        }
+    });
 }
 
-const urlRegex = /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i;
+const urlRegex = /(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?\/[a-zA-Z0-9]{2,}|((https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z]{2,}(\.[a-zA-Z]{2,})(\.[a-zA-Z]{2,})?)|(https:\/\/www\.|http:\/\/www\.|https:\/\/|http:\/\/)?[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}\.[a-zA-Z0-9]{2,}(\.[a-zA-Z0-9]{2,})?/g;
 const phoneRegex = /^(?:\+?\d{1,3})?\d{5,}$/;
 const twoDotsRegex = /\..*\..*/;
 
 const format = (string) => {
     string = string.replace(/(?:\r\n|\r|\n)/g, " <br> ");
 	let wordsArray = string.split (" ");
-    // let wordsArray = string.split(/[\s\r\n]+/);
     let output = "";
 
 	// 	CHECK FOR LINKS
@@ -91,12 +123,16 @@ const format = (string) => {
             output += `<a href="mailto:${e}">${e}</a> `;
             return;
         }
-        if ((twoDotsRegex.test(e) === false && e.includes(".") && isNaN(e) && !e.endsWith(".")) || (e.substring(0, 4) === "http") || (e.substring(0, 4) === "www.") || (twoDotsRegex.test(e) === true && e != "...")) {
-            let link = e;
-            if (e.substring(0, 4) != "http") {
-                link = "https://" + e;
-            }
-            output += `<a href="${link}" target="_blank" rel="noopener noreferrer">${e}</a> `;
+        if (e.toLowerCase().startsWith("https:")) {
+            output += `<a href="${e}" target="_blank" rel="noopener noreferrer">${e.length > 60 ? e.substring(18, 60) + '...': e.substring(18)}</a> `;
+            return;
+        }
+        if (e.toLowerCase().startsWith("http:")) {
+            output += `<a href="${e}" target="_blank" rel="noopener noreferrer">${e.length > 59 ? e.substring(17, 59) + '...': e.substring(17)}</a> `;
+            return;
+        }
+        if (e.toLowerCase().startsWith("www.")) {
+            output += `<a href="${e}" target="_blank" rel="noopener noreferrer">${e.length > 46 ? e.substring(4, 46) + '...': e.substring(4)}</a> `;
             return;
         }
         if (phoneRegex.test(e) === true) {
@@ -220,7 +256,7 @@ const toggleManual = () => {
 	}
 }
 
-let coloredTextBrightness = 40;
+let coloredTextBrightness = 33;
 
 const strMenuBtnToggleDarkMode = document.querySelector("#strMenuBtnToggleDarkMode");
 const strMenuBtnToggleLightMode = document.querySelector("#strMenuBtnToggleLightMode");
@@ -238,7 +274,7 @@ const toggleMode = (mode, triggerSource) => {
 		config.mode = "light";
 		document.body.classList.remove("dark-mode");
 		document.body.classList.add("light-mode");
-		coloredTextBrightness = 40;
+		coloredTextBrightness = 33;
 		strMenuBtnToggleDarkMode.removeAttribute('disabled');
 		strMenuBtnToggleLightMode.setAttribute('disabled', '');
 	}

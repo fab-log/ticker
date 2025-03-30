@@ -237,16 +237,16 @@
                     <div class="home-item" id="home-item-right">
                         <h3 id="strHomeH3_2"></h3>
                         <p id="strHomeP_1"></p>
-                        <img
+                        <!-- <img
                             src="pix/morse-machine.webp"
                             alt="morse key"
                             style="width: 250px"
                         />
-                        <br>
+                        <br> -->
                         <h4 id="strHomeH4"></h4>
                         <img
                             src="pix/morse-labels.webp"
-                            style="width: 360px"
+                            style="width: calc(100% - 96px); margin: 0 48px;"
                             alt="morse labels consist of a rounded stamp containing your initials as morse code"
                             class="logo-wide"
                         />
@@ -263,6 +263,7 @@
             </form>
             <hr> -->
 
+            <img src="pix/x.webp" alt="close" title="close" class="close-modal icon" onclick="toggleMenu(); showHeaderIcons()">
                 <div class="menu-heading">
                     <img src="pix/icon_translate.webp" alt="language" class="menu-icon">
                     <h3 id="strMenuH3Language"></h3>
@@ -395,8 +396,8 @@
                         onclick="logout()"
                     ></button>
                     <p>
-                        (<span id="strMenuPLoggedInUser"></span>
-                        <span id="pLoggedInUser"></span>)
+                        <span id="strMenuPLoggedInUser"></span>
+                        <span id="pLoggedInUser"></span>
                     </p>
                     <hr />
                 </div>
@@ -425,6 +426,8 @@
             <div class="arrow-up" id="arrow-up">
                 <img src="pix/arrow_back.webp" alt="move to top">
             </div>
+
+            <div class="max-image"></div>
         </div>  <!--main-->
 
         <div class="alert" id="alert"></div>
@@ -438,6 +441,11 @@
         <audio id="audioOut">
             <source src="audio/bling_glitch.mp3" type="audio/mpeg">
         </audio>
+        
+        <form id="frmUpload" enctype="multipart/form-data">
+            <input type="file" id="inpFileUpload" name="image" accept=".jpg, .png, .jpeg, .webp, .mp3" required>
+            <button type="submit" id="btnFileUpload">Upload</button>
+        </form>
     
 
         <!-- ############## -->
