@@ -10,11 +10,11 @@ Further features are:
 - notifications for new messages or new chats
 - user interface available in two languages (English, German)
 - individual customisation
-    - colouring
-    - light / dark mode
-    - audio on / off
-    - fullscreen
-    - update interval
+  - colouring
+  - light / dark mode
+  - audio on / off
+  - fullscreen
+  - update interval
 - simple formatting including bold and italic text, line breaks
 - automatic in text detection for urls, email addresses, and phone numbers
 - translate text to morse code by adding `[morse]` to the end of a message
@@ -44,10 +44,31 @@ Once you have two or more contacts, you can start a group chat. Give the group a
 Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.
 In case you like the encryption you can add [morse] to the end of a message and it will be translated to morse code.
 
+#### Formatting and morse code
+
+*ticker* provides simple text formatting similar to markdown syntax.
+
+- lines starting with `# ` convert to headings
+
+- text wrapped in single asteriscs `*` converts ti italic text
+
+- text wrapped in double asteriscs `**` converts to bold text
+
+- lines starting with `- ` convert to unordered list items
+
+#### Send images or music files
+
+Left to the input field you find a paperclip icon. Click or tap it to attach an image or a music file to a message. While typical file types are allowed for images, for music files only ***mp3*** is accepted. The maximum file size is limited to 25 MB. 
+The file name becomes the default text sent along with the message. If you want to change or add further text you can use the editing method described below
+
 #### Editing and Deleting
 
 If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.
 Note that you can only modify your own messages afterward.
+
+#### Forwarding
+
+From the context menu, accessible by pressing and holding a message (right click on PCs), you can pick the forwarding option. Edit the message text to your needs and choose one or multiple chat partners by checking the check box next to the name.
 
 #### Retrieving Messages
 
@@ -97,17 +118,15 @@ You can change your user data, such as name and email address. If you want to ad
 #### Permissions
 
 - **Allow notifications**: 
-Decide whether your device is allowed to display notifications.
+  Decide whether your device is allowed to display notifications.
 - **Stay logged in on this browser**: 
-With this option, you don’t need to log in every time you access ticker. This option is very convenient but should only be used on devices protected by PIN codes, facial recognition, etc. Once you explicitly log out, this setting will be reset.
+  With this option, you don’t need to log in every time you access ticker. This option is very convenient but should only be used on devices protected by PIN codes, facial recognition, etc. Once you explicitly log out, this setting will be reset.
 - **Allow other ticker users to find you**: 
-This is the only way you can be found on ticker. Other users can search for you using your first and last name, username, or email address.
+  This is the only way you can be found on ticker. Other users can search for you using your first and last name, username, or email address.
 
 #### Log Out
 
 On devices used by multiple people, it may be advisable to log out after use. This ensures that no one can view your messages. To log back in, you will need your email address and password.
-
-
 
 # Documentation
 
@@ -159,12 +178,10 @@ Example for one user. The database holds an array of users called `users.json`. 
         "chat_1729339335675_ymykp34msb0P",
         "chat_1730209733947_75sxLNxeAJPW"
     ],
-    "password": ["U9LJs3dHvFnO","8911f189b25624f000cedf1bad9966411c5e6ca23b9ab277cc7a9d1f9f462f9f"]	
+    "password": ["U9LJs3dHvFnO","8911f189b25624f000cedf1bad9966411c5e6ca23b9ab277cc7a9d1f9f462f9f"]    
     // password is not included when data is passed to client
 }
 ```
-
-
 
 ### connectedUsers
 
@@ -186,8 +203,6 @@ connectedUsers = [
 ]
 ```
 
-
-
 ### chats
 
 Each chat is stored in the data base as a separate file. Naming follows this structure: `chat_1729339335676_yU8y2flu140S.json`.
@@ -195,7 +210,7 @@ When data is passed to the client a variable called chats contains all the chats
 
 ```javascript
 chats = [
-   {			// example for a 1 to 1 chat
+   {            // example for a 1 to 1 chat
     "id": "chat_1731227689056_lLXnUwETFhLJ",
     "participants": [
       [1731228318272, "user_1730493002959_bETfDopWHG"],
@@ -212,7 +227,7 @@ chats = [
       }
     ]
   },
-  {				// example for a group chat
+  {                // example for a group chat
     "id": "chat_1731228493578_42BGf0qQ3hHu",
     "participants": [
       [1731229957044, "user_1729339335678_G1c6wtLUhqLI"],
@@ -247,8 +262,6 @@ chats = [
 ]
 ```
 
-
-
 ## localStorage
 
 ```javascript
@@ -258,88 +271,54 @@ localStorageObject = {
 }
 ```
 
-
-
 ## user configuration
 
 Possible keys are:
 
 ```javascript
 config: {
-    mode,			// string | "dark" or "light"
-    hue,			// integer > 0 <= 350 | step: 10 | default: 190
-    language,		// integer >= 0 | 0 = English | 1 = German | ...
-    notifications,	// boolean true or false
-    rememberMe,		// boolean true or false
-    fullscreen,		// boolean true or false
-    allowFindMe,	// boolean true or false
-    autoUpdate,		// integer > 60000 < 900000 | interval time in ms | default: 120000
+    mode,            // string | "dark" or "light"
+    hue,            // integer > 0 <= 350 | step: 10 | default: 190
+    language,        // integer >= 0 | 0 = English | 1 = German | ...
+    notifications,    // boolean true or false
+    rememberMe,        // boolean true or false
+    fullscreen,        // boolean true or false
+    allowFindMe,    // boolean true or false
+    autoUpdate,        // integer > 60000 < 900000 | interval time in ms | default: 120000
     audio           // boolean true or false
 }
 ```
-
-
 
 ## API
 
 ### /ticker.createAccount
 
-
-
 ### /ticker.inviteByMail
-
-
 
 ### /ticker.confirmEmail
 
-
-
 ### /ticker.login
-
-
 
 ### /ticker.quickLogin
 
-
-
 ### /ticker.forgotPassword
-
-
 
 ### /ticker.getUser
 
-
-
 ### /ticker.editPersonalData
-
-
 
 ### /ticker.updateUserSilent
 
-
-
 ### /ticker.deleteAccount
-
-
 
 ### /ticker.getConnectedUsers
 
-
-
 ### /ticker.getChat
-
-
 
 ### /ticker.addNewChat
 
-
-
 ### /ticker.updateChat
 
-
-
 ### /ticker.searchUsers
-
-
 
 ### /ticker.monitor

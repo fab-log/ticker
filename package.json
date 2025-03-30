@@ -1,6 +1,6 @@
 {
   "name": "ticker",
-  "version": "0.0.1",
+  "version": "0.4.0",
   "description": "messanger app",
   "main": "tickerServer.js",
   "scripts": {
@@ -12,5 +12,14 @@
     "express": "^4.21.1",
     "formidable": "^3.5.2",
     "nodemailer": "^6.9.15"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fab-log/ticker.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/fab-log/ticker/issues"
+  },
+  "homepage": "https://github.com/fab-log/ticker#readme"
 }

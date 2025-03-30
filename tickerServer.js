@@ -106,7 +106,7 @@ const sendResetPasswordEmail = (recipientEmail, subject, body) => {
 const verificationTimer = (email) => {
     // console.log("### => fn verificationTimer triggered");
     setTimeout(() => {
-        fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+        fs.readFile("public/ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
             if (err) {
                 res.status = "server error";
                 response.json(res);
@@ -115,7 +115,7 @@ const verificationTimer = (email) => {
             let emailVerificationsArray = JSON.parse(emailVerifications);
             let index = emailVerificationsArray.findIndex(e => e.data.email.at(-1)[2] === email);
             emailVerificationsArray.splice(index, 1);
-            fs.writeFile("./ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
+            fs.writeFile("public/ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
                 if (err) {
                     res.status = "server error";
                     response.json(res);
@@ -125,41 +125,6 @@ const verificationTimer = (email) => {
         });        
     }, 180000);  // 1800000 = 30 minutes
 }
-
-
-// ##################
-// ### FORMIDABLE ###
-// ##################
-
-/* app.post('/ticker.upload', (req, res, next) => {
-
-    const form = new formidable.IncomingForm();
-    form.uploadDir = path.join(__dirname, './ticker_db/assets/');
-    form.keepExtensions = true; // Keep file extension
-
-    form.parse(req, (err, fields, files) => {
-        if (err) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'Error parsing the file.' }));
-        }
-
-        const oldPath = files.image.path;
-        console.log({ oldPath });
-        const ext = path.extname(files.image.name);
-        const fileName = `asset_${Date.now()}_${randomCyphers(12)}${ext}`;
-        const newPath = path.join(form.uploadDir, fileName);
-
-        fs.rename(oldPath, newPath, (err) => {
-            if (err) {
-                res.writeHead(500, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ message: 'Error saving the file.' }));
-            }
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'File uploaded successfully!', fileName }));
-        });
-    });
-}); */
 
 
 // ######################
@@ -220,7 +185,7 @@ let monitor = {};
 let numberOfCalls = 0;
 
 const readMonitorData = () => {
-    fs.readFile("./ticker_db/monitor.json", "utf8", (err, data) => {
+    fs.readFile("public/ticker_db/monitor.json", "utf8", (err, data) => {
         if (err) {
             console.log("error reading monitor file");
             }
@@ -240,7 +205,7 @@ const updateMonitor = (key) => {
 
 const writeMonitorData = () => {
     if (numberOfCalls > 0) {
-        fs.writeFile("./ticker_db/monitor.json", JSON.stringify(monitor), (err) => {
+        fs.writeFile("public/ticker_db/monitor.json", JSON.stringify(monitor), (err) => {
         if (err) {
             console.log("error writing monitor file");
         }
@@ -250,7 +215,7 @@ const writeMonitorData = () => {
     
 }
 
-setInterval(writeMonitorData, 60000);
+setInterval(writeMonitorData, 300000);
 
 
 // #########################################
@@ -261,7 +226,7 @@ let usersCache;
 let numberOfEdits = 0;
 
 const readUsersDb = () => {
-    fs.readFile("./ticker_db/users.json", "utf8", (err, users) => {
+    fs.readFile("public/ticker_db/users.json", "utf8", (err, users) => {
         if (err) {
             console.log("error @ readUsersDb");
             throw err;
@@ -274,7 +239,7 @@ readUsersDb();
 
 const writeUsersDb = () => {
     if (numberOfEdits > 0) {
-        fs.writeFile("./ticker_db/users.json", JSON.stringify(usersCache), (err) => {
+        fs.writeFile("public/ticker_db/users.json", JSON.stringify(usersCache), (err) => {
             if (err) {
                 console.log("error @ writeUsersDb");
                 throw err;
@@ -285,7 +250,7 @@ const writeUsersDb = () => {
     }
 }
 
-setInterval(writeUsersDb, 60000);  // 600000
+setInterval(writeUsersDb, 180000);  // 600000
 
 
 // #####  #####    #
@@ -302,7 +267,7 @@ app.post("/ticker.createAccount", (request, response) => {
         response.json({ status: "Email already exists." });
         return;
     }
-    fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+    fs.readFile("public/ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
         if (err) {
             res.status = "server error";
             response.json(res);
@@ -320,7 +285,7 @@ app.post("/ticker.createAccount", (request, response) => {
             verificationCode
         };
         emailVerificationsArray.push(verificationObject);
-        fs.writeFile("./ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
+        fs.writeFile("public/ticker_db/emailVerification.json", JSON.stringify(emailVerificationsArray), (err) => {
             if (err) {
                 res.status = "server error";
                 response.json(res);
@@ -354,7 +319,7 @@ app.post("/ticker.inviteByMail", (request, response) => {
 app.post("/ticker.confirmEmail", (request, response) => {
     const data = request.body;
     let res = {};
-    fs.readFile("./ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
+    fs.readFile("public/ticker_db/emailVerification.json", "utf8", (err, emailVerifications) => {
         if (err) {
             res.status = "server error";
             response.json(res);
@@ -438,8 +403,10 @@ app.post('/ticker.quickLogin', (request, response) => {
         res.status = "OK";
         delete parsedUserData[index].password;  // ### !!! ###
         res.data = parsedUserData[index];
-        response.json(res);
-        updateMonitor("quickLogins");
+        setTimeout(() => {
+            response.json(res);
+            updateMonitor("quickLogins");            
+        }, 5);
     }
 });
 
@@ -639,7 +606,7 @@ app.post('/ticker.getConnectedUsers', (request, response) => {
 
 app.post("/ticker.getChat", (request, response) => {
     let data = request.body;
-    let fileName = `./ticker_db/${data.chatId}.json`;
+    let fileName = `public/ticker_db/${data.chatId}.json`;
     let res = {};
     fs.readFile(fileName, "utf8", (err, chat) => {
         if (err) {
@@ -657,7 +624,7 @@ app.post("/ticker.getChat", (request, response) => {
 
 app.post("/ticker.addNewChat", (request, response) => {
     let data = request.body;
-    let fileName = `./ticker_db/${data.newChat.id}.json`;
+    let fileName = `public/ticker_db/${data.newChat.id}.json`;
     let res = {};
     let parsedUserData = structuredClone(usersCache);
     let indexCurrentUser = parsedUserData.findIndex(e => e.id === data.newChat.participants[0][1]);
@@ -710,7 +677,7 @@ app.post("/ticker.addNewChat", (request, response) => {
 
 app.post("/ticker.updateChat", (request, response) => {
     let data = request.body;
-    let fileName = `./ticker_db/${data.chat.id}.json`;
+    let fileName = `public/ticker_db/${data.chat.id}.json`;
     let res = {};
     fs.readFile(fileName, "utf8", (err, chat) => {
         if (err) {
@@ -781,6 +748,7 @@ app.post("/ticker.updateChat", (request, response) => {
             res.data = parsedChat;
             response.json(res);
             updateMonitor("updateChat");
+            console.log(parsedChat.id + " updated");
         });
     });
 });
@@ -809,7 +777,7 @@ app.post("/ticker.removeChat", (request, response) => {
         parsedUsers[userIndex].chats.splice([chatIndex], 1);     // HOT!!!
     };
 
-    let fileName = `./ticker_db/${data.chat.id}.json`;           // HOT!!!
+    let fileName = `public/ticker_db/${data.chat.id}.json`;           // HOT!!!
     fs.unlink(fileName, (err) => {
         if (err) {
             res.status = "server error";
@@ -847,8 +815,101 @@ app.post("/ticker.searchUsers", (request, response) => {
     updateMonitor("searchUsers");
 });
 
+app.post("/ticker.upload", (request, response) => {
+    const form = new formidable.IncomingForm({
+        uploadDir: path.join(__dirname, './public/temp'), // Temporary directory for uploads
+        keepExtensions: true, // Keep file extensions
+    });
+
+    form.parse(request, (err, fields, files) => {
+        if (err) {
+            console.error("Error parsing the file:", err);
+            return response.status(500).json({ status: "Error", message: "File upload failed" });
+        }
+
+        const uploadedFiles = files.file; // This is an array
+        if (!uploadedFiles || uploadedFiles.length === 0) {
+            return response.status(400).json({ status: "Error", message: "No file uploaded" });
+        }
+
+        // Access the first file in the array
+        const uploadedFile = uploadedFiles[0]; // Get the first PersistentFile object
+
+        const fileSizeLimit = 25 * 1024 * 1024; // 25 MB
+        if (uploadedFile.size > fileSizeLimit) {
+            fs.unlink(uploadedFile.filepath, (unlinkErr) => {
+                if (unlinkErr) console.error("Error deleting oversized file:", unlinkErr);
+            });
+            return response.status(400).json({ status: "file too large", message: "File size exceeds 25 MB limit." });
+        }
+
+        const oldPath = uploadedFile.filepath; // Correctly access the filepath
+        const newFileName = `atm_${Date.now()}_${randomCyphers(12)}_${uploadedFile.originalFilename}`;
+        const newPath = `public/ticker_db/${newFileName}`;
+
+        // Read the file and write it to the new location
+        fs.readFile(oldPath, (readErr, rawData) => {
+            if (readErr) {
+                console.error("Error reading the file:", readErr);
+                return response.status(500).json({ status: "Error", message: "File processing failed" });
+            }
+
+            fs.writeFile(newPath, rawData, (writeErr) => {
+                if (writeErr) {
+                    console.error("Error writing the file:", writeErr);
+                    return response.status(500).json({ status: "Error", message: "File saving failed" });
+                }
+                fs.unlink(uploadedFile.filepath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error("Error deleting temporary file:", unlinkErr);
+                        return response.status(500).json({ status: "Error deleting temporary file" });
+                    }
+                });
+                updateMonitor("upload")
+                return response.json({ status: "OK", attachmentId: newFileName });
+            });
+        });
+    });
+});
+
+/* app.post("/ticker.removeAttachment", (request, response) => {
+    let data = request.body;
+    fs.unlink(`public/ticker_db/${data.id}`,  (unlinkErr) => {
+        if (unlinkErr) {
+            console.error("Error deleting file:", unlinkErr);
+            response.status(500).json({ status: "Error deleting file on server" });
+        }
+    })
+    let res = {};
+    res.status = "OK";
+    response.json(res);
+    updateMonitor("removeAttachment");
+}); */
+
+app.post("/ticker.removeAttachment", (request, response) => {
+    let data = request.body;
+    let res = {};
+    const filePath = `public/ticker_db/${data.id}`;
+    if (fs.existsSync(filePath)) {
+        fs.unlink(filePath, (unlinkErr) => {
+            if (unlinkErr) {
+                console.error("Error deleting file:", unlinkErr);
+                res.status = "Error deleting file on server";
+                return response.json(res);
+            }
+            updateMonitor("removeAttachment");
+            res.status = "OK";
+            return response.json(res);
+        });
+    } else {
+        console.warn("File does not exist:", filePath);
+        res.status = "File not found";
+        return response.json(res);
+    }
+});
+
 app.get("/ticker.monitor", (request, response) => {
-    fs.readFile("./ticker_db/monitor.json", "utf8", (err, data) => {
+    fs.readFile("public/ticker_db/monitor.json", "utf8", (err, data) => {
         if (err) {
             return response.status(500).json({ status: "server error reading monitor file" });
         }
@@ -912,52 +973,58 @@ app.get("/ticker.monitor", (request, response) => {
                 <th><b>Item</b></th><th><b>Value</b></th>
             </tr>
             <tr>
-                <td>createAccount</td><td>${monitor.createdAccounts}</td>
+                <td>createAccount</td><td>${monitor.createdAccounts.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>deleteAccount</td><td>${monitor.deleteAccount}</td>
+                <td>deleteAccount</td><td>${monitor.deleteAccount.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>confirmEmail</td><td>${monitor.confirmEmail}</td>
+                <td>confirmEmail</td><td>${monitor.confirmEmail.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>total logins</td><td>${monitor.totalLogins}</td>
+                <td>total logins</td><td>${monitor.totalLogins.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>login</td><td>${monitor.regularLogins}</td>
+                <td>login</td><td>${monitor.regularLogins.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>quickLogin</td><td>${monitor.quickLogins}</td>
+                <td>quickLogin</td><td>${monitor.quickLogins.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>forgotPassword</td><td>${monitor.forgotPassword}</td>
+                <td>forgotPassword</td><td>${monitor.forgotPassword.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>getUser</td><td>${monitor.getUser}</td>
+                <td>getUser</td><td>${monitor.getUser.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>searchUsers</td><td>${monitor.searchUsers}</td>
+                <td>searchUsers</td><td>${monitor.searchUsers.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>inviteByMail</td><td>${monitor.inviteByMail}</td>
+                <td>inviteByMail</td><td>${monitor.inviteByMail.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>editPersonalData</td><td>${monitor.editPersonalData}</td>
+                <td>editPersonalData</td><td>${monitor.editPersonalData.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>updateUserSilent</td><td>${monitor.updateUserSilent}</td>
+                <td>updateUserSilent</td><td>${monitor.updateUserSilent.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>getConnectedUsers</td><td>${monitor.getConnectedUsers}</td>
+                <td>getConnectedUsers</td><td>${monitor.getConnectedUsers.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>getChat</td><td>${monitor.getChat}</td>
+                <td>getChat</td><td>${monitor.getChat.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>addNewChat</td><td>${monitor.addNewChat}</td>
+                <td>addNewChat</td><td>${monitor.addNewChat.toLocaleString()}</td>
             </tr>
             <tr>
-                <td>updateChat</td><td>${monitor.updateChat}</td>
+                <td>updateChat</td><td>${monitor.updateChat.toLocaleString()}</td>
+            </tr>
+            <tr>
+                <td>upload</td><td>${monitor.upload.toLocaleString()}</td>
+            </tr>
+            <tr>
+                <td>removeAttachment</td><td>${monitor.removeAttachment.toLocaleString()}</td>
             </tr>
         </table>
         <button type="button" onclick="refreshMonitor()">refresh</button><br><br>
