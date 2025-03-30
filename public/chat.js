@@ -293,14 +293,14 @@ const renderForwardMessageMenu = (messageId) => {
 		thisAttachment.toLowerCase().endsWith(".webp"))) {
 		attachmentString = `
 			<p>${lang("Attachment", "Anhang")}</p>
-			<img src="/ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
+			<img src="ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
 			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
 			<hr>
 		`;
 	} else if (thisAttachment && thisAttachment != "" && thisAttachment.toLowerCase().endsWith(".mp3")) {
 		attachmentString = `
 			<p>${lang("Attachment", "Anhang")}</p>
-			<audio controls src="/ticker_db/${thisAttachment}"></audio>
+			<audio controls src="ticker_db/${thisAttachment}"></audio>
 			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
 			<hr>
 		`;
@@ -446,14 +446,14 @@ const renderModalEditMessage = (id) => {
 		thisAttachment.toLowerCase().endsWith(".webp"))) {
 		attachmentString = `
 			<p>${lang("Attachment", "Anhang")}</p>
-			<img src="/ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
+			<img src="ticker_db/${thisAttachment}" alt="${currentChat.messages[index].text.at(-1)[1]}" class="preview-image">
 			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
 			<hr>
 		`;
 	} else if (thisAttachment && thisAttachment != "" && thisAttachment.toLowerCase().endsWith(".mp3")) {
 		attachmentString = `
 			<p>${lang("Attachment", "Anhang")}</p>
-			<audio controls src="/ticker_db/${thisAttachment}"></audio>
+			<audio controls src="ticker_db/${thisAttachment}"></audio>
 			<p class="small margin-top-0">&nbsp;&nbsp;&nbsp;(${thisAttachment.substring(31)})</p>
 			<hr>
 		`;
@@ -790,7 +790,7 @@ const maxImage = (id) => {
 	maxImage.style.display = "block";
 	maxImage.innerHTML = `
 		<img src="pix/x.webp" alt="close" title="close" class="close-modal" style="margin: 12px;" onclick="closeMaxImage()">
-		<img src="/ticker_db/${id}" class="full-size">
+		<img src="ticker_db/${id}" class="full-size">
 	`;
 }
 
@@ -859,7 +859,7 @@ const renderChat = async (chatId) => {
 		let file = "";
 		if (currentChat.messages[i].attachment) {
 			let attachment = currentChat.messages[i].attachment;
-			let path = "/ticker_db";
+			let path = "ticker_db";
 			if (attachment != "" && (attachment.substring(attachment.length - 4).toLowerCase() === ".png" || attachment.substring(attachment.length - 4).toLowerCase() === ".jpg" || attachment.substring(attachment.length - 5).toLowerCase() === ".jpeg" || attachment.substring(attachment.length - 5).toLowerCase() === ".webp")) {
 				file = `<img src="${path}/${attachment}" alt="${text}" onclick="maxImage('${attachment}')" onerror="this.onerror=null; this.src='pix/not_found.webp';"><br>`;
 			} else if (attachment != "" && attachment.substring(attachment.length - 4).toLowerCase() === ".mp3") {
