@@ -15,7 +15,7 @@ Further features are:
   - audio on / off
   - fullscreen
   - update interval
-- simple formatting including bold and italic text, line breaks
+- simple formatting including lists, bold and italic text, line breaks
 - automatic in text detection for urls, email addresses, and phone numbers
 - translate text to morse code by adding `[morse]` to the end of a message
 
@@ -72,9 +72,7 @@ The file name becomes the default text sent along with the message. If you want 
 If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.
 Note that you can only modify your own messages afterward.
 
-#### Forwarding#äö+üp
-
-
+#### Forwarding
 
 From the context menu, accessible by pressing and holding a message (right click on PCs), you can pick the forwarding option. Edit the message text to your needs and choose one or multiple chat partners by checking the check box next to the name.
 
