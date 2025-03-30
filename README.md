@@ -88,11 +88,11 @@ On top of the chat messages you find the name of your chat partner or the chat g
 
 #### Language
 
-Here, you can select your preferred language. Currently, English and German are available.
+Select your preferred language. Currently, English and German are available.
 
 #### Status
 
-Directly below, you can write something about yourself or what’s on your mind. This information is visible to your contacts. It remains until you delete it or replace it with something else.
+In this section you can write something about yourself or what’s on your mind. This information is visible to your contacts. It remains visible until you delete it or replace it with something else.
 
 #### Color Scheme
 
@@ -227,7 +227,10 @@ chats = [
         "author": "user_1730493002959_bETfDopWHG",
         "text": [
           [1731228318265, "Hello World"]
-        ]
+        ],
+        "attachment": "atm_1729339335676_XeWghiBjlcZt_lovesong.mp3",
+        "forwarded": true,                            // optional
+        "replyTo": "msg_1731229752570_XeWghiBjlcZt"    // optional
       }
     ]
   },
@@ -268,6 +271,9 @@ chats = [
 
 ## localStorage
 
+The localStorage is exclusevily used to detect users who have granted permission to be remembered by the browser ('remember me on this browser on this device'). 
+Once a user logs out or changes the permission the localStorageObject will be empty.
+
 ```javascript
 localStorageObject = {
     id: currentUser.id,
@@ -297,9 +303,35 @@ config: {
 
 ### /ticker.createAccount
 
+Type: POST
+
+Expects: Object containing user data for one user
+
+Responds with: Object
+
+- .status
+
+- .data (user data as received, except password)
+
 ### /ticker.inviteByMail
 
+Type: POST
+
+Expects: Object containing email data
+
+Responds with: Object
+
+- .status
+
 ### /ticker.confirmEmail
+
+Type: POST
+
+Expects: Object containing verification code
+
+Responds with: Object
+
+- .status
 
 ### /ticker.login
 
@@ -324,5 +356,9 @@ config: {
 ### /ticker.updateChat
 
 ### /ticker.searchUsers
+
+### /ticker.upload
+
+### /ticker.removeAttachment
 
 ### /ticker.monitor
