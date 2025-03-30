@@ -142,6 +142,9 @@ const format = (string) => {
         output += `${e} `;
     });
 	output = output.replaceAll(" <br> ", " <br>");		// remove unnecssary whitespace
+
+	// NEW VARIANT FOR HEADING, BOLD, AND ITALIC
+	// output = output.replace(/^# (.+)$/gm, '<h3>$1</h3>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>');
 	
 	// FORMAT UNORDERED LIST
 	const lines = output.split("<br>");		// output.split(/<br>|<\/h3>/);
