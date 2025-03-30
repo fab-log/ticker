@@ -39,6 +39,12 @@ Once you have two or more contacts, you can start a group chat. Give the group a
 
 ## Messages
 
+#### Retrieving Messages
+
+As long as the browser window is open, ticker checks for new messages every two minutes.¹ However, you can also manually refresh messages by clicking/tapping the icon with the two circular arrows at the top. Additionally, you can adjust the automatic update interval in the settings.
+
+¹ Depending on the device and settings, other factors such as power-saving mode or do-not-disturb mode may affect whether and how long ticker remains active in the background.
+
 #### Sending messages
 
 Select a chat by clicking or tapping on it to enter the chat. Write a message in the input field. Use the triangular arrow to the right to send the message.
@@ -48,33 +54,33 @@ In case you like the encryption you can add [morse] to the end of a message and 
 
 *ticker* provides simple text formatting similar to markdown syntax.
 
-- lines starting with `# ` convert to headings
+- lines starting with `# ` convert to a **heading**
 
-- text wrapped in single asteriscs `*` converts ti italic text
+- text wrapped in single asteriscs `*` converts to **italic** text
 
-- text wrapped in double asteriscs `**` converts to bold text
+- text wrapped in double asteriscs `**` converts to **bold** text
 
-- lines starting with `- ` convert to unordered list items
+- lines starting with `- ` convert to unordered **list** items
 
 #### Send images or music files
 
-Left to the input field you find a paperclip icon. Click or tap it to attach an image or a music file to a message. While typical file types are allowed for images, for music files only ***mp3*** is accepted. The maximum file size is limited to 25 MB. 
-The file name becomes the default text sent along with the message. If you want to change or add further text you can use the editing method described below
+Left to the input field you find a paperclip icon. Click or tap it to attach an image or a music file to a message. While typical file types are allowed for images, only ***mp3*** files are accepted for audio. The maximum file size is limited to 25 MB. 
+The file name becomes the default text sent along with the message. If you want to change or add further text you can use the editing method described below.
 
 #### Editing and Deleting
 
 If you want to edit or delete a message, you can do so via the context menu. On a smartphone or tablet, press and hold the message until a window with the two options appears. On a PC, this can be done with a right-click.
 Note that you can only modify your own messages afterward.
 
-#### Forwarding
+#### Forwarding#äö+üp
+
+
 
 From the context menu, accessible by pressing and holding a message (right click on PCs), you can pick the forwarding option. Edit the message text to your needs and choose one or multiple chat partners by checking the check box next to the name.
 
-#### Retrieving Messages
+#### Reply
 
-As long as the browser window is open, ticker checks for new messages every two minutes.¹ However, you can also manually refresh messages by clicking/tapping the icon with the two circular arrows at the top. Additionally, you can adjust the automatic interval in the settings.
-
-¹ Depending on the device and settings, other factors such as power-saving mode or do-not-disturb mode may affect whether and how long ticker remains active in the background.
+In case you want to reply to a specific message you can do so by pressing and holding it (right click on PCs) and choose `reply` from the context menu. Add your text and send the message. The original message will be quoted in your reply.
 
 #### Learn more about your chat partners
 
