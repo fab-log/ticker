@@ -510,7 +510,7 @@ const contextMessage = (event, id) => {
 	console.log("contextmenu triggered. Message " + id);
 	let index = currentChat.messages.findIndex(e => e.id === id);
 	let contextString = `
-		<p onclick="renderReplyToMessage('${id}')">${lang("reply", "antworden")}</p>
+		<p onclick="renderReplyToMessage('${id}')">${lang("reply", "antworten")}</p>
 		<hr>
 		<p onclick="renderForwardMessageMenu('${id}')">${lang("forward message", "Nachricht weiterleiten")}</p>
 	`;
