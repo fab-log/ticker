@@ -15,6 +15,9 @@ Further features are:
   - audio on / off
   - fullscreen
   - update interval
+- appending images (png, jpg, webp) and music (mp3) files
+- forwarding messages
+- replying to specific messages (which are then quoted in the reply)
 - simple formatting including lists, bold and italic text, line breaks
 - automatic in text detection for urls, email addresses, and phone numbers
 - translate text to morse code by adding `[morse]` to the end of a message
