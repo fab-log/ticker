@@ -22,19 +22,19 @@ const port = 8003;
 // ### MAIL ###
 // ############
 const transporter = nodemailer.createTransport({
-    host: "smtp.strato.de",
-    port: 465,
+    host: process.env.NOREPLY_HOST,
+    port: process.env.NOREPLY_PORT,
     secure: true, // upgrade later with STARTTLS
     auth: {
-      user: "noreply@fablog.eu",
-      pass: "mxvNfgAWFWps",
+      user: process.env.NOREPLY_MAIL_ADDRESS,
+      pass: process.env.NOREPLY_MAIL_PW,
     }
 });
 
 const sendVerificationEmail = (userEmail, verificationCode) => {
     // console.log("### => fn sendVerificationEmail to " + userEmail + " triggered");
     const mailOptions = {
-        from: 'noreply@fablog.eu',
+        from: process.env.NOREPLY_MAIL_ADDRESS,
         to: userEmail,
         subject: 'ticker app email verification',
         html: `
@@ -73,7 +73,7 @@ const sendVerificationEmail = (userEmail, verificationCode) => {
 
 const sendInvitationEmail = (recipientEmail, subject, body) => {
     const mailOptions = {
-        from: 'noreply@fablog.eu',
+        from: process.env.NOREPLY_MAIL_ADDRESS,
         to: recipientEmail,
         subject,
         html: body
@@ -89,7 +89,7 @@ const sendInvitationEmail = (recipientEmail, subject, body) => {
 
 const sendResetPasswordEmail = (recipientEmail, subject, body) => {
     const mailOptions = {
-        from: 'noreply@fablog.eu',
+        from: process.env.NOREPLY_MAIL_ADDRESS,
         to: recipientEmail,
         subject,
         html: body
